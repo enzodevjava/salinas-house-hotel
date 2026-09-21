@@ -7,7 +7,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://salinas-house-hotel.vercel.app',
+  site: 'https://salinas-house-hotel-one.vercel.app',
   output: 'static',
   integrations: [react(), sitemap()],
 

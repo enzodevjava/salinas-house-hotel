@@ -6,7 +6,7 @@ import estrutura from "../../content/estrutura.json";
 import heroImg from "../../assets/images/hero/hero-aerial-hd.jpg";
 import recepcaoImg from "../../assets/images/hotel/recepcao.jpg";
 
-const siteUrl = Astro.site?.toString() ?? "https://salinas-house-hotel.vercel.app/";
+const siteUrl = Astro.site?.toString() ?? "https://salinas-house-hotel-one.vercel.app/";
 const absoluteUrl = (path: string) => new URL(path, siteUrl).toString();
 
 const [heroOtimizada, recepcaoOtimizada] = await Promise.all([
