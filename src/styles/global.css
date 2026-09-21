@@ -1,0 +1,203 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Fontes self-hosted â€” apenas subset latin (cobre acentuaÃ§Ã£o do portuguÃªs, U+0000-00FF) */
+@font-face {
+  font-family: "Fraunces Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/fraunces-latin-opsz.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+
+@font-face {
+  font-family: "Inter Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/inter-latin-opsz.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+2000-206F, U+20AC, U+2122;
+}
+
+@theme {
+  /* Paleta â€” ancorada no verde da marca */
+  --color-verde: #3b4a3f;
+  --color-verdeEsc: #26302a;
+  --color-verdeCl: #5e7064;
+  --color-cobre: #a97142;
+  --color-cobreTexto: #8a5c34; /* variante escurecida do cobre para texto pequeno, contraste AA sobre areia */
+  --color-cobreClaro: #c99159; /* variante clareada do cobre para texto pequeno, contraste AA sobre verdeEsc */
+  --color-areia: #f2ede4;
+  --color-linho: #e4dbcc;
+  --color-carvao: #1c1a17;
+  --color-osso: #fbf9f5;
+
+  /* Tipografia */
+  --font-display: "Fraunces Variable", ui-serif, Georgia, serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Tracking customizado para rÃ³tulos, nav e botÃµes */
+  --tracking-label: 0.18em;
+  --tracking-nav: 0.14em;
+
+  /* Easing do reveal-on-scroll */
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Container */
+  --container-page: 1440px;
+
+  --breakpoint-xs: 30rem;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-areia);
+    color: var(--color-carvao);
+    font-family: var(--font-sans);
+    font-feature-settings: "liga" 1, "kern" 1;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 300;
+  }
+
+  h2 {
+    font-size: clamp(1.9rem, 4vw, 3.25rem);
+  }
+
+  h3 {
+    font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  }
+
+  p {
+    max-width: 62ch;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-verde);
+    outline-offset: 2px;
+  }
+
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+}
+
+@layer components {
+  .rotulo-secao {
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    font-size: 0.6875rem;
+    letter-spacing: var(--tracking-label);
+    color: var(--color-cobreTexto);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .rotulo-secao--claro {
+    color: var(--color-cobreClaro);
+  }
+
+  .container-page {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 64rem) {
+    .container-page {
+      padding-inline: 3rem;
+    }
+  }
+
+  .secao {
+    padding-block: clamp(5rem, 11vw, 9rem);
+  }
+
+  /* Reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 700ms var(--ease-reveal),
+      transform 700ms var(--ease-reveal);
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: -3rem;
+    z-index: 100;
+    background: var(--color-verde);
+    color: var(--color-osso);
+    padding: 0.75rem 1.25rem;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: var(--tracking-nav);
+    transition: top 200ms var(--ease-reveal);
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  .scroll-sem-barra {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scroll-sem-barra::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Inset do container aplicado como padding, sem limitar a largura — usado
+     para blocos full-bleed onde a foto sangra até a borda da viewport mas o
+     texto continua alinhado ao container de 1440px. */
+  .bleed-inset-left {
+    padding-left: max(1.5rem, calc((100vw - var(--container-page)) / 2 + 1.5rem));
+  }
+
+  @media (min-width: 64rem) {
+    .bleed-inset-left {
+      padding-left: max(3rem, calc((100vw - var(--container-page)) / 2 + 3rem));
+    }
+  }
+}

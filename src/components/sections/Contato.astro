@@ -1,0 +1,182 @@
+---
+import hotel from "../../content/hotel.json";
+import RotuloSecao from "../ui/RotuloSecao.astro";
+import Reveal from "../ui/Reveal.astro";
+import { linkWhatsApp, MENSAGENS } from "../../lib/whatsapp";
+
+const enderecoCompleto = `${hotel.endereco}, ${hotel.cidade} - ${hotel.estado}, ${hotel.cep}`;
+const mapsHref = `https://www.google.com/maps?q=${hotel.geo.lat},${hotel.geo.lng}`;
+---
+
+<section id="contato" class="secao bg-verdeEsc text-osso">
+  <div class="container-page grid grid-cols-1 gap-14 lg:grid-cols-12">
+    <Reveal class="lg:col-span-5">
+      <RotuloSecao texto="Contato" claro />
+      <h2 class="text-osso">Fale com a gente.</h2>
+      <p class="mt-4 text-osso/75">
+        Dúvidas sobre reserva, disponibilidade ou como chegar — a gente
+        responde rápido pelo WhatsApp.
+      </p>
+
+      <dl class="mt-10 flex flex-col gap-6 text-sm">
+        <div>
+          <dt class="text-[11px] uppercase tracking-nav text-osso/60">Endereço</dt>
+          <dd class="mt-1">
+            <a
+              href={mapsHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-osso/85 underline decoration-osso/30 underline-offset-4 transition-colors hover:text-cobreClaro hover:decoration-cobreClaro"
+            >
+              {enderecoCompleto}
+            </a>
+          </dd>
+        </div>
+
+        <div>
+          <dt class="text-[11px] uppercase tracking-nav text-osso/60">WhatsApp</dt>
+          <dd class="mt-1 flex flex-col gap-1">
+            {
+              hotel.whatsapp.map((w, i) => (
+                <a
+                  href={linkWhatsApp(MENSAGENS.hero, w.numero)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-osso/85 transition-colors hover:text-cobreClaro"
+                >
+                  {w.rotulo} {hotel.whatsapp.length > 1 ? i + 1 : ""} — {w.numero}
+                </a>
+              ))
+            }
+          </dd>
+        </div>
+
+        <div>
+          <dt class="text-[11px] uppercase tracking-nav text-osso/60">E-mail</dt>
+          <dd class="mt-1">
+            <a
+              href={`mailto:${hotel.email}`}
+              class="text-osso/85 transition-colors hover:text-cobreClaro"
+            >
+              {hotel.email}
+            </a>
+          </dd>
+        </div>
+
+        <div>
+          <dt class="text-[11px] uppercase tracking-nav text-osso/60">Instagram</dt>
+          <dd class="mt-1">
+            <a
+              href={hotel.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-osso/85 transition-colors hover:text-cobreClaro"
+            >
+              @salinashousehotel
+            </a>
+          </dd>
+        </div>
+      </dl>
+    </Reveal>
+
+    <Reveal indice={1} class="lg:col-span-6 lg:col-start-7">
+      <form id="form-contato" class="flex flex-col gap-5" novalidate>
+        <div class="flex flex-col gap-2">
+          <label for="nome" class="text-[11px] uppercase tracking-nav text-osso/60">
+            Nome
+          </label>
+          <input
+            id="nome"
+            name="nome"
+            type="text"
+            required
+            class="border-b border-osso/25 bg-transparent py-2 text-osso outline-none placeholder:text-osso/60 focus:border-cobre"
+            placeholder="Seu nome"
+          />
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="telefone" class="text-[11px] uppercase tracking-nav text-osso/60">
+            Telefone
+          </label>
+          <input
+            id="telefone"
+            name="telefone"
+            type="tel"
+            required
+            class="border-b border-osso/25 bg-transparent py-2 text-osso outline-none placeholder:text-osso/60 focus:border-cobre"
+            placeholder="(38) 9 9999-9999"
+          />
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label for="mensagem" class="text-[11px] uppercase tracking-nav text-osso/60">
+            Mensagem
+          </label>
+          <textarea
+            id="mensagem"
+            name="mensagem"
+            required
+            rows={4}
+            class="mensagem-textarea resize-none border-b border-osso/25 bg-transparent py-2 text-osso outline-none placeholder:text-osso/60 focus:border-cobre"
+            placeholder="Conte pra gente o que você precisa"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="mt-2 inline-flex items-center justify-center gap-2 self-start bg-verde px-9 py-4 text-xs font-medium uppercase tracking-nav text-osso transition-colors duration-[250ms] hover:bg-osso hover:text-verdeEsc"
+        >
+          Enviar pelo WhatsApp
+        </button>
+      </form>
+    </Reveal>
+  </div>
+</section>
+
+<script>
+  import { linkWhatsApp } from "../../lib/whatsapp";
+
+  const form = document.getElementById("form-contato") as HTMLFormElement | null;
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const dados = new FormData(form);
+    const nome = dados.get("nome");
+    const telefone = dados.get("telefone");
+    const mensagem = dados.get("mensagem");
+
+    const texto = `Olá! Me chamo ${nome}, telefone ${telefone}. ${mensagem}`;
+    window.open(linkWhatsApp(texto), "_blank", "noopener,noreferrer");
+  });
+</script>
+
+<style>
+  .mensagem-textarea {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--color-osso) 35%, transparent) transparent;
+  }
+
+  .mensagem-textarea::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .mensagem-textarea::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .mensagem-textarea::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--color-osso) 35%, transparent);
+    border-radius: 9999px;
+  }
+
+  .mensagem-textarea::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--color-osso) 55%, transparent);
+  }
+</style>

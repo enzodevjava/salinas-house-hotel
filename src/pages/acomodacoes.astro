@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import Acomodacoes from "../components/sections/Acomodacoes.astro";
+import hotel from "../content/hotel.json";
+
+const title = `Acomodações — ${hotel.nome}`;
+const description =
+  "Conheça os 5 tipos de acomodação do Salinas House Hotel: Suíte Presidencial e quartos Individual, Duplo, Triplo e Quádruplo Deluxe.";
+---
+
+<Base title={title} description={description}>
+  <Header />
+  <main id="conteudo-principal">
+    <Acomodacoes />
+  </main>
+  <Footer />
+</Base>

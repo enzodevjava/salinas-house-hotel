@@ -1,0 +1,93 @@
+[
+  {
+    "numero": "001",
+    "slug": "cafe-da-manha",
+    "nome": "Café da manhã buffet incluso",
+    "descricao": "Buffet completo incluso na diária, para começar bem o dia.",
+    "destaqueRapido": true
+  },
+  {
+    "numero": "002",
+    "slug": "restaurante",
+    "nome": "Restaurante",
+    "descricao": "Ambiente acolhedor para refeições tranquilas durante a estadia.",
+    "destaqueRapido": false
+  },
+  {
+    "numero": "003",
+    "slug": "bar-cachacas",
+    "nome": "Bar de cachaças artesanais",
+    "descricao": "Carta de cachaças artesanais da região, num ambiente rústico.",
+    "destaqueRapido": false
+  },
+  {
+    "numero": "004",
+    "slug": "jacuzzi",
+    "nome": "Jacuzzi",
+    "descricao": "Um momento de descanso dentro da propriedade.",
+    "destaqueRapido": false
+  },
+  {
+    "numero": "005",
+    "slug": "jardim",
+    "nome": "Jardim",
+    "descricao": "Área verde ampla para caminhar e respirar ar puro.",
+    "destaqueRapido": false
+  },
+  {
+    "numero": "006",
+    "slug": "playground",
+    "nome": "Playground",
+    "descricao": "Espaço dedicado para as crianças brincarem com segurança.",
+    "destaqueRapido": false
+  },
+  {
+    "numero": "007",
+    "slug": "estacionamento",
+    "nome": "Estacionamento privativo gratuito",
+    "descricao": "Vaga garantida, sem custo adicional, para quem chega de carro.",
+    "destaqueRapido": true
+  },
+  {
+    "numero": "008",
+    "slug": "wifi",
+    "nome": "Wi-Fi em toda a propriedade",
+    "descricao": "Conexão disponível em todos os ambientes do hotel.",
+    "destaqueRapido": true
+  },
+  {
+    "numero": "009",
+    "slug": "recepcao-24h",
+    "nome": "Recepção 24 horas",
+    "descricao": "Equipe disponível a qualquer hora do dia ou da noite.",
+    "destaqueRapido": true
+  },
+  {
+    "numero": "010",
+    "slug": "room-service",
+    "nome": "Room service",
+    "descricao": "Serviço de quarto para sua comodidade quando precisar.",
+    "destaqueRapido": false
+  },
+  {
+    "numero": "011",
+    "slug": "pet-friendly",
+    "nome": "Pet friendly",
+    "descricao": "Pets são bem-vindos mediante solicitação prévia, sem custo adicional.",
+    "destaqueRapido": true
+  },
+  {
+    "numero": "012",
+    "slug": "ar-condicionado",
+    "nome": "Ar-condicionado",
+    "descricao": "Climatização em todos os quartos.",
+    "destaqueRapido": false
+  },
+  {
+    "numero": "013",
+    "slug": "limpeza-diaria",
+    "nome": "Limpeza diária",
+    "descricao": "Serviço de arrumação do quarto todos os dias da estadia.",
+    "destaqueRapido": false
+  }
+]

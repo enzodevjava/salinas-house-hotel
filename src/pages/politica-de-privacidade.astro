@@ -1,0 +1,117 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import hotel from "../content/hotel.json";
+
+const title = `Política de Privacidade — ${hotel.nome}`;
+const description = `Política de privacidade do ${hotel.nome}: quais dados coletamos, para quê, e como exercer seus direitos conforme a LGPD.`;
+
+const proseClasses =
+  "prose max-w-none prose-headings:font-display prose-headings:font-normal prose-headings:text-carvao prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-p:text-verdeCl prose-li:text-verdeCl prose-a:text-verde prose-a:no-underline hover:prose-a:text-verdeEsc hover:prose-a:underline prose-strong:text-carvao";
+---
+
+<Base title={title} description={description}>
+  <Header />
+  <main id="conteudo-principal">
+    <section class="secao container-page max-w-3xl">
+      <span class="rotulo-secao">Legal</span>
+      <h1 class="text-carvao">Política de Privacidade</h1>
+      <p class="mt-4 text-sm text-verdeCl">Última atualização: janeiro de 2026.</p>
+
+      <div class={`mt-10 ${proseClasses}`}>
+        <p>
+          O {hotel.nome} preza pela privacidade dos seus hóspedes e visitantes
+          deste site. Esta política explica quais dados coletamos, por que
+          motivo, e quais são os seus direitos.
+        </p>
+
+        <h2>1. Dados que coletamos</h2>
+        <ul>
+          <li>
+            <strong>Dados do formulário de contato</strong>: nome, telefone e
+            mensagem.
+          </li>
+          <li>
+            <strong>Dados do pedido de reserva</strong>: quarto escolhido,
+            datas de check-in e check-out, número de hóspedes, nome,
+            telefone e, opcionalmente, e-mail.
+          </li>
+          <li>
+            <strong>Dados de navegação</strong>: informações técnicas
+            coletadas automaticamente ao acessar o site (como endereço IP e
+            tipo de navegador), usadas para segurança e melhoria da
+            experiência.
+          </li>
+        </ul>
+        <p>
+          Não coletamos dados de pagamento neste site — tanto o formulário de
+          contato quanto o pedido de reserva são enviados como mensagem para
+          o WhatsApp do hotel, no seu próprio dispositivo, e a reserva é
+          confirmada diretamente com a nossa equipe. Reservas também podem
+          ser feitas pela plataforma Booking.com, que tem sua própria
+          política de privacidade.
+        </p>
+
+        <h2>2. Finalidade do tratamento</h2>
+        <p>Usamos os dados para:</p>
+        <ul>
+          <li>Responder a pedidos de reserva, informações e contato;</li>
+          <li>Melhorar a experiência de navegação no site;</li>
+          <li>Cumprir obrigações legais, quando aplicável.</li>
+        </ul>
+
+        <h2>3. Base legal</h2>
+        <p>
+          O tratamento dos dados fornecidos no formulário de contato se
+          baseia no seu <strong>consentimento</strong> (art. 7º, I, da LGPD),
+          dado no momento em que você preenche e envia o formulário. Dados de
+          navegação são tratados com base no <strong>legítimo interesse</strong>
+          do hotel em manter a segurança e o bom funcionamento do site (art.
+          7º, IX).
+        </p>
+
+        <h2>4. Compartilhamento de dados</h2>
+        <p>
+          Não vendemos nem compartilhamos seus dados com terceiros para fins
+          de marketing. Os dados do formulário de contato são enviados
+          diretamente para o WhatsApp do hotel, no seu próprio dispositivo —
+          não passam por nenhum servidor ou banco de dados nosso. Podemos
+          compartilhar dados com prestadores de serviço estritamente
+          necessários à operação do site (como hospedagem), sempre sob
+          obrigação de confidencialidade.
+        </p>
+
+        <h2>5. Seus direitos</h2>
+        <p>
+          De acordo com o art. 18 da Lei Geral de Proteção de Dados (LGPD),
+          você tem o direito de:
+        </p>
+        <ul>
+          <li>Confirmar a existência de tratamento dos seus dados;</li>
+          <li>Acessar seus dados;</li>
+          <li>Corrigir dados incompletos, inexatos ou desatualizados;</li>
+          <li>
+            Solicitar a anonimização, bloqueio ou eliminação de dados
+            desnecessários;
+          </li>
+          <li>Solicitar a portabilidade dos dados;</li>
+          <li>Revogar o consentimento a qualquer momento;</li>
+          <li>
+            Solicitar informações sobre o compartilhamento dos seus dados.
+          </li>
+        </ul>
+
+        <h2>6. Contato do controlador</h2>
+        <p>Para exercer seus direitos ou tirar dúvidas sobre esta política, fale com a gente pelo e-mail <a href={`mailto:${hotel.email}`}>{hotel.email}</a> ou pelo WhatsApp do hotel.</p>
+
+        <h2>7. Alterações desta política</h2>
+        <p>
+          Esta política pode ser atualizada periodicamente. Recomendamos
+          revisá-la de tempos em tempos.
+        </p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

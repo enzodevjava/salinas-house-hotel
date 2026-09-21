@@ -1,0 +1,39 @@
+---
+interface Props {
+  as?: string;
+  indice?: number;
+  class?: string;
+}
+
+const { as: Tag = "div", indice = 0, class: extraClass = "" } = Astro.props;
+const delay = indice * 90;
+---
+
+<Tag class={`reveal ${extraClass}`} style={`transition-delay:${delay}ms`} data-reveal>
+  <slot />
+</Tag>
+
+<script>
+  const elementos = document.querySelectorAll<HTMLElement>("[data-reveal]");
+  const prefersReduced = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  if (prefersReduced) {
+    elementos.forEach((el) => el.classList.add("is-visible"));
+  } else if (elementos.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    elementos.forEach((el) => observer.observe(el));
+  }
+</script>

@@ -1,0 +1,44 @@
+---
+interface Props {
+  href: string;
+  variante?: "primario" | "secundario";
+  sobreFoto?: boolean;
+  compacto?: boolean;
+  target?: string;
+  class?: string;
+  ariaLabel?: string;
+}
+
+const {
+  href,
+  variante = "primario",
+  sobreFoto = false,
+  compacto = false,
+  target,
+  class: extraClass = "",
+  ariaLabel,
+} = Astro.props;
+
+const rel = target === "_blank" ? "noopener noreferrer" : undefined;
+
+const base = `inline-flex items-center justify-center gap-2 text-xs font-medium uppercase tracking-nav transition-colors duration-[250ms] whitespace-nowrap ${
+  compacto ? "px-5 py-2.5" : "px-9 py-4"
+}`;
+
+const variantes: Record<string, string> = {
+  primario: "bg-verde text-osso hover:bg-verdeEsc",
+  secundario: sobreFoto
+    ? "bg-transparent border border-osso text-osso hover:bg-osso hover:text-verdeEsc"
+    : "bg-transparent border border-verde text-verde hover:bg-verde hover:text-osso",
+};
+---
+
+<a
+  href={href}
+  target={target}
+  rel={rel}
+  aria-label={ariaLabel}
+  class={`${base} ${variantes[variante]} ${extraClass}`}
+>
+  <slot />
+</a>

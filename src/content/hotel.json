@@ -1,0 +1,64 @@
+{
+  "nome": "Salinas House Hotel",
+  "antigoNome": "Valley Hills Hotel",
+  "endereco": "Rodovia BR-251, Km 313",
+  "cidade": "Salinas",
+  "estado": "MG",
+  "estadoNome": "Minas Gerais",
+  "cep": "39560-000",
+  "geo": {
+    "lat": -16.1341404,
+    "lng": -42.2806619
+  },
+  "whatsapp": [
+    { "numero": "5538999367489", "rotulo": "Reservas" },
+    { "numero": "5538997426692", "rotulo": "Reservas" }
+  ],
+  "email": "salinashouse@uai.com.br",
+  "instagram": "https://www.instagram.com/salinashousehotel/",
+  "booking": "https://www.booking.com/hotel/br/valley-hills.pt-br.html",
+  "areaConstruida": "7.500 m²",
+  "quartosTotal": 36,
+  "checkin": "14:00",
+  "checkout": "12:00",
+  "navegacao": [
+    { "href": "/#o-hotel", "label": "o hotel" },
+    { "href": "/acomodacoes", "label": "acomodações" },
+    { "href": "/restaurante", "label": "restaurante" },
+    { "href": "/#estrutura", "label": "estrutura" },
+    { "href": "/salinas", "label": "salinas" },
+    { "href": "/eventos", "label": "eventos" },
+    { "href": "/#contato", "label": "contato" }
+  ],
+  "teasers": {
+    "acomodacoes": "Da Suíte Presidencial ao Quádruplo Deluxe — cinco jeitos de descansar, cada um com galeria própria.",
+    "restaurante": "Café da manhã incluso, jantar tranquilo, e um bar dedicado às cachaças artesanais da região.",
+    "salinas": "A minutos do Museu da Cachaça, no coração da Cidade Mundial da Cachaça.",
+    "eventos": "Jardim, restaurante e 36 quartos — estrutura pronta para casamentos, formaturas e eventos corporativos."
+  },
+  "mapaEmbedUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3832.6743075329173!2d-42.2806619!3d-16.1341404!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x74de90e8a4a3eef%3A0xc2614235c41fe904!2sSalinas%20House%20Hotel!5e0!3m2!1spt-BR!2sbr",
+  "oHotel": {
+    "paragrafos": [
+      "O Salinas House Hotel foi pensado para quem busca conforto e segurança numa cidade que respira hospitalidade mineira, bem na beira da BR-251.",
+      "São 7.500 m² de estrutura moderna, com 36 quartos entre suítes e quartos deluxe, jardim amplo e áreas comuns pensadas para o descanso."
+    ],
+    "numeros": [
+      { "valor": "7.500 m²", "label": "Área construída" },
+      { "valor": "36", "label": "Quartos" },
+      { "valor": "BR-251", "label": "Km 313" }
+    ]
+  },
+  "restauranteBar": {
+    "restaurante": {
+      "titulo": "Restaurante",
+      "texto": "Ambiente acolhedor e iluminado. Café da manhã buffet incluso na diária para começar bem o dia, e jantar tranquilo pra fechar."
+    },
+    "bar": {
+      "titulo": "Bar de Cachaças",
+      "texto": "Carta de cachaças artesanais da região, servida num ambiente de mobiliário em madeira e detalhes rústicos."
+    }
+  },
+  "eventos": {
+    "texto": "Salinas recebe casamentos, formaturas e eventos corporativos o ano todo — e o Salinas House Hotel está pronto pra sediar o seu, com jardim, restaurante e 36 quartos à disposição dos convidados."
+  }
+}

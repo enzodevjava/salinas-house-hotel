@@ -1,0 +1,121 @@
+---
+import { Image } from "astro:assets";
+import hotel from "../../content/hotel.json";
+import Botao from "../ui/Botao.astro";
+import MobileMenu from "./MobileMenu.tsx";
+import logoClaro from "../../assets/images/logo/logo-claro.png";
+import logoEscuro from "../../assets/images/logo/logo-escuro.png";
+
+interface Props {
+  transparente?: boolean;
+}
+
+const { transparente = false } = Astro.props;
+const pathnameAtual = Astro.url.pathname;
+
+const ancorasHome = hotel.navegacao
+  .filter((item) => item.href.startsWith("/#"))
+  .map((item) => item.href.replace("/#", ""));
+---
+
+{
+  transparente && (
+    <div
+      id="header-sentinel"
+      aria-hidden="true"
+      class="absolute top-[80px] left-0 h-px w-px"
+    />
+  )
+}
+
+<header
+  id="site-header"
+  data-scrolled={transparente ? "false" : "true"}
+  class="group fixed inset-x-0 top-0 z-40 border-b border-transparent transition-colors duration-300 data-[scrolled=true]:bg-areia data-[scrolled=true]:border-linho"
+>
+  <div class="container-page flex h-20 items-center justify-between">
+    <a
+      href="/"
+      aria-label={hotel.nome}
+      class="relative shrink-0 whitespace-nowrap font-display text-lg text-osso group-data-[scrolled=true]:text-verde transition-colors lg:h-12 lg:w-auto"
+    >
+      <span class="lg:hidden">Salinas House Hotel</span>
+      <Image
+        src={logoClaro}
+        alt=""
+        class="hidden h-12 w-auto object-contain drop-shadow-[0_1px_5px_rgba(0,0,0,0.65)] transition-opacity duration-300 lg:block group-data-[scrolled=true]:opacity-0"
+      />
+      <Image
+        src={logoEscuro}
+        alt=""
+        class="absolute inset-0 hidden h-12 w-auto object-contain opacity-0 transition-opacity duration-300 lg:block group-data-[scrolled=true]:opacity-100"
+      />
+    </a>
+
+    <nav
+      id="nav-desktop"
+      aria-label="Navegação principal"
+      class="hidden lg:flex items-center gap-8"
+    >
+      {
+        hotel.navegacao.map((item) => {
+          const ativo = item.href === pathnameAtual;
+          return (
+            <a
+              href={item.href}
+              data-active={String(ativo)}
+              data-nav-href={item.href}
+              class="text-osso group-data-[scrolled=true]:text-verdeCl text-[11px] font-medium uppercase tracking-nav capitalize pb-1 transition-colors underline-offset-[10px] decoration-cobre decoration-1 data-[active=true]:underline"
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+
+    <div class="flex items-center gap-5">
+      <div class="hidden sm:block">
+        <Botao href="/reservar" compacto>
+          Reservar
+        </Botao>
+      </div>
+      <div class="text-osso group-data-[scrolled=true]:text-verde transition-colors">
+        <MobileMenu client:visible />
+      </div>
+    </div>
+  </div>
+</header>
+
+<script is:inline define:vars={{ ancorasHome }}>
+  const header = document.getElementById("site-header");
+  const sentinel = document.getElementById("header-sentinel");
+
+  if (sentinel && header) {
+    const bgObserver = new IntersectionObserver(([entry]) => {
+      header.dataset.scrolled = entry.isIntersecting ? "false" : "true";
+    });
+    bgObserver.observe(sentinel);
+  }
+
+  const secoes = ancorasHome
+    .map((id) => document.getElementById(id))
+    .filter((el) => el !== null);
+
+  if (secoes.length) {
+    const linkPara = (id) =>
+      document.querySelector(`#nav-desktop a[data-nav-href="/#${id}"]`);
+
+    const spyObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const link = linkPara(entry.target.id);
+          if (link) link.dataset.active = String(entry.isIntersecting);
+        }
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+
+    secoes.forEach((secao) => spyObserver.observe(secao));
+  }
+</script>

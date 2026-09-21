@@ -1,0 +1,37 @@
+{
+  "intro": "Salinas é reconhecida como a Cidade Mundial da Cachaça, com uma tradição de produção artesanal que atravessa gerações.",
+  "atracoes": [
+    {
+      "slug": "museu-da-cachaca",
+      "nome": "Museu da Cachaça",
+      "texto": "Um acervo dedicado à história e à produção da cachaça de Salinas.",
+      "distancia": "5 min de carro",
+      "imagem": "museu-da-cachaca.jpg",
+      "alt": "Museu da Cachaça em Salinas — Salinas House Hotel"
+    },
+    {
+      "slug": "alambiques-artesanais",
+      "nome": "Alambiques artesanais",
+      "texto": "Conheça de perto o processo artesanal dos produtores da região.",
+      "distancia": null,
+      "imagem": "alambiques-artesanais.jpg",
+      "alt": "Alambique artesanal de cachaça na região de Salinas — Salinas House Hotel"
+    },
+    {
+      "slug": "festival-mundial-da-cachaca",
+      "nome": "Festival Mundial da Cachaça",
+      "texto": "O maior evento do calendário de Salinas, celebrando a cachaça artesanal mineira.",
+      "distancia": null,
+      "imagem": "festival-mundial-da-cachaca.jpg",
+      "alt": "Festival Mundial da Cachaça em Salinas — Salinas House Hotel"
+    },
+    {
+      "slug": "centro-de-salinas",
+      "nome": "Centro de Salinas",
+      "texto": "Lojas, restaurantes e o comércio local, no coração da cidade.",
+      "distancia": "10 min de carro",
+      "imagem": "centro-de-salinas.jpg",
+      "alt": "Centro da cidade de Salinas, Minas Gerais — Salinas House Hotel"
+    }
+  ]
+}

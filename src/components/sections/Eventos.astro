@@ -1,0 +1,76 @@
+---
+import { Picture } from "astro:assets";
+import eventosImg from "../../assets/images/eventos/eventos.jpg";
+import hotel from "../../content/hotel.json";
+import estrutura from "../../content/estrutura.json";
+import RotuloSecao from "../ui/RotuloSecao.astro";
+import Reveal from "../ui/Reveal.astro";
+import Botao from "../ui/Botao.astro";
+import { linkWhatsApp, MENSAGENS } from "../../lib/whatsapp";
+
+const tiposDeEvento = ["Casamentos", "Formaturas", "Eventos corporativos"];
+
+const buscar = (slug: string) => estrutura.find((item) => item.slug === slug);
+const jardim = buscar("jardim");
+const restaurante = buscar("restaurante");
+const estacionamento = buscar("estacionamento");
+
+const estrutura4 = [
+  { nome: "36 quartos", descricao: "Espaço para hospedar todos os convidados no mesmo lugar." },
+  { nome: jardim?.nome, descricao: jardim?.descricao },
+  { nome: restaurante?.nome, descricao: restaurante?.descricao },
+  { nome: estacionamento?.nome, descricao: estacionamento?.descricao },
+];
+---
+
+<section id="eventos" class="secao container-page">
+  <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-center">
+    <Reveal>
+      <RotuloSecao texto="Eventos" />
+      <h2 class="text-carvao">Seu evento, do jeito de Salinas.</h2>
+
+      <div class="mt-5 flex flex-wrap gap-2">
+        {
+          tiposDeEvento.map((tipo) => (
+            <span class="border border-linho px-3 py-1 text-[11px] uppercase tracking-nav text-verdeCl">
+              {tipo}
+            </span>
+          ))
+        }
+      </div>
+
+      <p class="mt-5 text-verdeCl">{hotel.eventos.texto}</p>
+
+      <Botao href={linkWhatsApp(MENSAGENS.eventos)} target="_blank" class="mt-8">
+        Fale sobre seu evento
+      </Botao>
+    </Reveal>
+
+    <Reveal indice={1} class="relative aspect-[3/2] w-full">
+      <Picture
+        src={eventosImg}
+        alt={`Espaço para eventos do ${hotel.nome}`}
+        formats={["avif", "webp"]}
+        widths={[480, 800, 1200]}
+        sizes="(min-width: 1024px) 50vw, 100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 h-full w-full object-cover"
+      />
+    </Reveal>
+  </div>
+
+  <Reveal indice={2} class="mt-16">
+    <span class="rotulo-secao">O que você tem à disposição</span>
+    <div class="mt-6 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        estrutura4.map((item) => (
+          <div class="border-t border-linho pt-4">
+            <h3 class="text-lg text-carvao">{item.nome}</h3>
+            <p class="mt-1 text-sm text-verdeCl">{item.descricao}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Reveal>
+</section>

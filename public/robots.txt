@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://salinas-house-hotel.vercel.app/sitemap-index.xml

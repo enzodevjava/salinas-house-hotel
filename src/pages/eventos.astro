@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import Eventos from "../components/sections/Eventos.astro";
+import hotel from "../content/hotel.json";
+
+const title = `Eventos — ${hotel.nome}`;
+const description =
+  "Casamentos, formaturas e eventos corporativos em Salinas: jardim, restaurante e 36 quartos à disposição no Salinas House Hotel.";
+---
+
+<Base title={title} description={description}>
+  <Header />
+  <main id="conteudo-principal">
+    <Eventos />
+  </main>
+  <Footer />
+</Base>

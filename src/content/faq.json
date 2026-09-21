@@ -1,0 +1,42 @@
+[
+  {
+    "pergunta": "Posso estacionar no hotel?",
+    "resposta": "Sim. O hotel tem estacionamento privativo gratuito para os hóspedes."
+  },
+  {
+    "pergunta": "O café da manhã está incluso?",
+    "resposta": "Sim, o café da manhã é buffet e já está incluso na diária."
+  },
+  {
+    "pergunta": "O hotel tem restaurante?",
+    "resposta": "Sim, o hotel tem restaurante próprio, além de um bar com cachaças artesanais da região."
+  },
+  {
+    "pergunta": "Quais são os horários de check-in e check-out?",
+    "resposta": "Check-in das 14:00 às 23:00 e check-out até as 12:00. Check-in ou check-out antecipado/tardio pode ser pedido no momento da reserva, mas não é garantido."
+  },
+  {
+    "pergunta": "O hotel tem piscina?",
+    "resposta": "Não, o hotel não tem piscina."
+  },
+  {
+    "pergunta": "O que tem para fazer perto do hotel?",
+    "resposta": "A poucos minutos do hotel: o Museu da Cachaça, alambiques artesanais da região e o centro de Salinas, a Cidade Mundial da Cachaça."
+  },
+  {
+    "pergunta": "O hotel tem spa?",
+    "resposta": "Não temos um spa, mas a Suíte Presidencial conta com sauna exclusiva e banheira de hidromassagem."
+  },
+  {
+    "pergunta": "Qual é a política para pets?",
+    "resposta": "Pets são bem-vindos mediante solicitação prévia, sem custo adicional."
+  },
+  {
+    "pergunta": "Todos os quartos têm banheiro privativo?",
+    "resposta": "Sim, todos os 5 tipos de acomodação têm banheiro privativo."
+  },
+  {
+    "pergunta": "Algum quarto tem varanda?",
+    "resposta": "Não, os quartos não têm varanda privativa."
+  }
+]

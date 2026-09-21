@@ -1,0 +1,11 @@
+---
+interface Props {
+  texto: string;
+  claro?: boolean;
+  as?: "span" | "p";
+}
+
+const { texto, claro = false, as: Tag = "span" } = Astro.props;
+---
+
+<Tag class={`rotulo-secao ${claro ? "rotulo-secao--claro" : ""}`}>{texto}</Tag>

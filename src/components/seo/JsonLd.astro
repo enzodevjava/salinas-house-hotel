@@ -1,0 +1,85 @@
+---
+import { getImage } from "astro:assets";
+import hotel from "../../content/hotel.json";
+import quartos from "../../content/quartos.json";
+import estrutura from "../../content/estrutura.json";
+import heroImg from "../../assets/images/hero/hero-aerial-hd.jpg";
+import recepcaoImg from "../../assets/images/hotel/recepcao.jpg";
+
+const siteUrl = Astro.site?.toString() ?? "https://salinas-house-hotel.vercel.app/";
+const absoluteUrl = (path: string) => new URL(path, siteUrl).toString();
+
+const [heroOtimizada, recepcaoOtimizada] = await Promise.all([
+  getImage({ src: heroImg, format: "jpg", width: 1600 }),
+  getImage({ src: recepcaoImg, format: "jpg", width: 1200 }),
+]);
+
+const amenityFeature = estrutura.map((item) => ({
+  "@type": "LocationFeatureSpecification",
+  name: item.nome,
+  value: true,
+}));
+
+const extrairOcupacao = (specs: string[]) => {
+  for (const spec of specs) {
+    const match = spec.match(/Até\s+(\d+)(?:[–-](\d+))?\s+h[oó]spedes/i);
+    if (match) {
+      const min = Number(match[1]);
+      const max = match[2] ? Number(match[2]) : min;
+      return { "@type": "QuantitativeValue", minValue: min, maxValue: max };
+    }
+  }
+  return undefined;
+};
+
+const hotelRooms = quartos.map((quarto) => {
+  const ocupacao = extrairOcupacao(quarto.specs);
+  return {
+    "@type": "HotelRoom",
+    name: quarto.nome,
+    description: quarto.descricao,
+    ...(ocupacao ? { occupancy: ocupacao } : {}),
+    amenityFeature: quarto.specs.map((spec) => ({
+      "@type": "LocationFeatureSpecification",
+      name: spec,
+      value: true,
+    })),
+  };
+});
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Hotel",
+  name: hotel.nome,
+  alternateName: hotel.antigoNome,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: hotel.endereco,
+    addressLocality: hotel.cidade,
+    addressRegion: hotel.estado,
+    postalCode: hotel.cep,
+    addressCountry: "BR",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: hotel.geo.lat,
+    longitude: hotel.geo.lng,
+  },
+  telephone: hotel.whatsapp.map((w) => `+${w.numero}`),
+  email: hotel.email,
+  url: siteUrl,
+  image: [absoluteUrl(heroOtimizada.src), absoluteUrl(recepcaoOtimizada.src)],
+  starRating: {
+    "@type": "Rating",
+    ratingValue: 3,
+  },
+  petsAllowed: true,
+  checkinTime: hotel.checkin,
+  checkoutTime: hotel.checkout,
+  numberOfRooms: hotel.quartosTotal,
+  amenityFeature,
+  containsPlace: hotelRooms,
+};
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />

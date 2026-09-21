@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import Salinas from "../components/sections/Salinas.astro";
+import hotel from "../content/hotel.json";
+
+const title = `Salinas, a Cidade Mundial da Cachaça — ${hotel.nome}`;
+const description =
+  "Conheça Salinas, Minas Gerais: o Museu da Cachaça, alambiques artesanais, o Festival Mundial da Cachaça e o centro da cidade — tudo perto do Salinas House Hotel.";
+---
+
+<Base title={title} description={description}>
+  <Header transparente />
+  <main id="conteudo-principal">
+    <Salinas />
+  </main>
+  <Footer />
+</Base>

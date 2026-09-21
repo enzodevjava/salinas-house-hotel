@@ -1,0 +1,86 @@
+---
+import { getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import quartosData from "../../content/quartos.json";
+import hotel from "../../content/hotel.json";
+import RotuloSecao from "../ui/RotuloSecao.astro";
+import Reveal from "../ui/Reveal.astro";
+import AbasQuartos, {
+  type QuartoComImagens,
+} from "../ui/AbasQuartos.tsx";
+
+const arquivosImagem = import.meta.glob<{ default: ImageMetadata }>(
+  "../../assets/images/quartos/*.{jpg,jpeg,png}",
+  { eager: true }
+);
+
+const encontrarImagem = (arquivo: string): ImageMetadata => {
+  const entrada = Object.entries(arquivosImagem).find(([caminho]) =>
+    caminho.endsWith(`/${arquivo}`)
+  );
+  if (!entrada) throw new Error(`Imagem não encontrada: ${arquivo}`);
+  return entrada[1].default;
+};
+
+const widths = [480, 800, 1200];
+const sizes = "(min-width: 1024px) 58vw, 100vw";
+
+const quartos: QuartoComImagens[] = await Promise.all(
+  quartosData.map(async (quarto) => {
+    const imagens = await Promise.all(
+      quarto.galeria.map(async ({ arquivo, alt }) => {
+        const imagemOriginal = encontrarImagem(arquivo);
+        const [avif, webp] = await Promise.all([
+          getImage({ src: imagemOriginal, format: "avif", widths, sizes }),
+          getImage({ src: imagemOriginal, format: "webp", widths, sizes }),
+        ]);
+
+        return {
+          src: webp.src,
+          avifSrcSet: avif.srcSet.attribute,
+          webpSrcSet: webp.srcSet.attribute,
+          width: imagemOriginal.width,
+          height: imagemOriginal.height,
+          alt,
+        };
+      })
+    );
+
+    return {
+      slug: quarto.slug,
+      nome: quarto.nome,
+      destaque: quarto.destaque,
+      descricao: quarto.descricao,
+      specs: quarto.specs,
+      imagens,
+    };
+  })
+);
+---
+
+<section id="acomodacoes" class="secao container-page">
+  <Reveal>
+    <RotuloSecao texto="Acomodações" />
+    <h2 class="text-carvao">Cinco formas de descansar.</h2>
+    <p class="mt-4 max-w-2xl text-verdeCl">
+      Da Suíte Presidencial ao Quarto Individual Deluxe, cinco tipos de
+      acomodação — todos com Wi-Fi, TV e banheiro privativo. Veja fotos e
+      specs de cada um antes de reservar.
+    </p>
+
+    <div class="mt-8 flex flex-wrap gap-x-10 gap-y-3 border-y border-linho py-5">
+      <div>
+        <span class="text-[11px] uppercase tracking-nav text-cobreTexto">Check-in</span>
+        <p class="font-display text-xl text-carvao">{hotel.checkin}</p>
+      </div>
+      <div>
+        <span class="text-[11px] uppercase tracking-nav text-cobreTexto">Check-out</span>
+        <p class="font-display text-xl text-carvao">{hotel.checkout}</p>
+      </div>
+    </div>
+  </Reveal>
+
+  <div class="mt-12">
+    <AbasQuartos client:visible quartos={quartos} />
+  </div>
+</section>

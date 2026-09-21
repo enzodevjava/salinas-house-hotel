@@ -1,0 +1,95 @@
+---
+import { Picture } from "astro:assets";
+import heroSuite from "../../assets/images/quartos/suite-presidencial-01.jpg";
+import heroBar from "../../assets/images/restaurante/restaurante-bar.jpg";
+import heroRecepcao from "../../assets/images/hotel/recepcao.jpg";
+import Botao from "../ui/Botao.astro";
+import { linkWhatsApp, MENSAGENS } from "../../lib/whatsapp";
+import hotel from "../../content/hotel.json";
+
+const slides = [
+  { img: heroSuite, alt: `Suíte Presidencial do ${hotel.nome}` },
+  { img: heroBar, alt: `Bar e lounge do ${hotel.nome}` },
+  { img: heroRecepcao, alt: `Recepção do ${hotel.nome}` },
+];
+---
+
+<section id="topo" class="relative h-[100dvh] w-full overflow-hidden">
+  {
+    slides.map((slide, i) => (
+      <Picture
+        src={slide.img}
+        alt={slide.alt}
+        formats={["avif", "webp"]}
+        widths={[768, 1280, 1920, 2400]}
+        sizes="100vw"
+        loading={i === 0 ? "eager" : "lazy"}
+        fetchpriority={i === 0 ? "high" : "auto"}
+        class="hero-slide absolute inset-0 h-full w-full object-cover"
+        style={`animation-delay: ${-(i * 6)}s`}
+      />
+    ))
+  }
+
+  <div
+    class="absolute inset-0"
+    style="background: linear-gradient(to top, rgba(28,26,23,.75), rgba(28,26,23,.15) 55%, rgba(28,26,23,.35))"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative z-10 flex h-full flex-col justify-end">
+    <div class="container-page pb-20 sm:pb-28">
+      <h1 class="max-w-4xl text-osso">
+        Sua casa longe de casa, na Cidade Mundial da Cachaça.
+      </h1>
+      <p class="mt-6 text-sm uppercase tracking-nav text-osso/85">
+        Salinas — Minas Gerais · BR-251, Km 313
+      </p>
+
+      <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+        <Botao href={linkWhatsApp(MENSAGENS.hero)} target="_blank">
+          Reservar pelo WhatsApp
+        </Botao>
+        <Botao href={hotel.booking} target="_blank" variante="secundario" sobreFoto>
+          Ver no Booking
+        </Botao>
+      </div>
+    </div>
+  </div>
+
+  <a
+    href="#o-hotel"
+    aria-label="Rolar para o conteúdo"
+    class="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-osso motion-safe:animate-bounce"
+  >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 4v16m0 0l-6-6m6 6l6-6" stroke="currentColor" stroke-width="1.5" />
+    </svg>
+  </a>
+</section>
+
+<style>
+  .hero-slide {
+    opacity: 1;
+    animation: hero-crossfade 18s infinite;
+  }
+
+  @keyframes hero-crossfade {
+    0% { opacity: 1; }
+    22% { opacity: 1; }
+    33% { opacity: 0; }
+    89% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slide {
+      animation: none;
+      opacity: 0;
+    }
+    .hero-slide:first-child {
+      opacity: 1;
+    }
+  }
+</style>

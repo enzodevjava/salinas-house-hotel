@@ -1,0 +1,19 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import RestauranteBar from "../components/sections/RestauranteBar.astro";
+import hotel from "../content/hotel.json";
+
+const title = `Restaurante & Bar — ${hotel.nome}`;
+const description =
+  "Café da manhã buffet incluso, jantar tranquilo e um bar de cachaças artesanais da região — conheça o restaurante e o bar do Salinas House Hotel.";
+---
+
+<Base title={title} description={description}>
+  <Header transparente />
+  <main id="conteudo-principal">
+    <RestauranteBar />
+  </main>
+  <Footer />
+</Base>

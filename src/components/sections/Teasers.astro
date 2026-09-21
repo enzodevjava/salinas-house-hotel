@@ -1,0 +1,63 @@
+---
+import suiteImg from "../../assets/images/quartos/suite-presidencial-01.jpg";
+import restauranteImg from "../../assets/images/restaurante/restaurante-bar.jpg";
+import salinasImg from "../../assets/images/salinas/museu-da-cachaca.jpg";
+import eventosImg from "../../assets/images/eventos/eventos.jpg";
+import hotel from "../../content/hotel.json";
+import Reveal from "../ui/Reveal.astro";
+import CardTeaser from "../ui/CardTeaser.astro";
+
+const cards = [
+  {
+    imagem: suiteImg,
+    alt: `Suíte Presidencial do ${hotel.nome}`,
+    rotulo: "Acomodações",
+    titulo: "Cinco formas de descansar.",
+    texto: hotel.teasers.acomodacoes,
+    href: "/acomodacoes",
+  },
+  {
+    imagem: restauranteImg,
+    alt: `Restaurante e bar do ${hotel.nome}`,
+    rotulo: "Restaurante & Bar",
+    titulo: "Sabor e convivência mineira.",
+    texto: hotel.teasers.restaurante,
+    href: "/restaurante",
+  },
+  {
+    imagem: salinasImg,
+    alt: "Museu da Cachaça em Salinas",
+    rotulo: "A Região",
+    titulo: "A Cidade Mundial da Cachaça.",
+    texto: hotel.teasers.salinas,
+    href: "/salinas",
+  },
+  {
+    imagem: eventosImg,
+    alt: `Espaço para eventos do ${hotel.nome}`,
+    rotulo: "Eventos",
+    titulo: "Do jeito de Salinas.",
+    texto: hotel.teasers.eventos,
+    href: "/eventos",
+  },
+];
+---
+
+<section class="secao bg-areia">
+  <div class="container-page">
+    <Reveal>
+      <span class="rotulo-secao">Explore</span>
+      <h2 class="text-carvao">Conheça cada canto do hotel.</h2>
+    </Reveal>
+
+    <div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        cards.map((card, i) => (
+          <Reveal indice={i % 4} class="h-full">
+            <CardTeaser {...card} />
+          </Reveal>
+        ))
+      }
+    </div>
+  </div>
+</section>

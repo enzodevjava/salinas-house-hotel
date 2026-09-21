@@ -1,0 +1,90 @@
+---
+import hotel from "../../content/hotel.json";
+---
+
+<footer class="bg-verdeEsc text-osso">
+  <div
+    class="container-page flex flex-col gap-6 border-t border-osso/15 py-10 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <nav aria-label="Navegação secundária" class="flex flex-wrap gap-x-6 gap-y-2">
+      {
+        hotel.navegacao.map((item) => (
+          <a
+            href={item.href}
+            class="text-[11px] uppercase tracking-nav capitalize text-osso/70 transition-colors hover:text-cobreClaro"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-6">
+      <div class="flex gap-6 text-[11px] uppercase tracking-nav">
+        <a
+          href="/politica-de-privacidade"
+          class="text-osso/70 transition-colors hover:text-cobreClaro"
+        >
+          Política de Privacidade
+        </a>
+        <a href="/termos" class="text-osso/70 transition-colors hover:text-cobreClaro">
+          Termos de Uso
+        </a>
+      </div>
+
+      <a
+        href={hotel.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Instagram do ${hotel.nome}`}
+        class="instagram-link shrink-0"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="instagram-gradiente" x1="0%" y1="100%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#feda75" />
+              <stop offset="25%" stop-color="#fa7e1e" />
+              <stop offset="50%" stop-color="#d62976" />
+              <stop offset="75%" stop-color="#962fbf" />
+              <stop offset="100%" stop-color="#4f5bd5" />
+            </linearGradient>
+          </defs>
+          <rect class="instagram-icone" x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="1.5" />
+          <circle class="instagram-icone" cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5" />
+          <circle class="instagram-ponto" cx="17.5" cy="6.5" r="1" fill="currentColor" />
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="container-page pb-8 text-[11px] text-osso/60">
+    © 2026 {hotel.nome}
+  </div>
+</footer>
+
+<style>
+  .instagram-link {
+    color: var(--color-osso, #fbf9f5);
+    opacity: 0.7;
+    transition: opacity 0.25s, transform 0.25s;
+  }
+  .instagram-link:hover,
+  .instagram-link:focus-visible {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  .instagram-icone {
+    transition: stroke 0.3s;
+  }
+  .instagram-ponto {
+    transition: fill 0.3s;
+  }
+  .instagram-link:hover .instagram-icone,
+  .instagram-link:focus-visible .instagram-icone {
+    stroke: url(#instagram-gradiente);
+  }
+  .instagram-link:hover .instagram-ponto,
+  .instagram-link:focus-visible .instagram-ponto {
+    fill: url(#instagram-gradiente);
+  }
+</style>

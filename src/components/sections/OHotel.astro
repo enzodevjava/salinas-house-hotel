@@ -1,0 +1,45 @@
+---
+import { Picture } from "astro:assets";
+import recepcaoImg from "../../assets/images/hotel/recepcao.jpg";
+import hotel from "../../content/hotel.json";
+import RotuloSecao from "../ui/RotuloSecao.astro";
+import Reveal from "../ui/Reveal.astro";
+
+const { oHotel } = hotel;
+---
+
+<section id="o-hotel" class="grid grid-cols-1 lg:grid-cols-12 lg:items-center">
+  <Reveal class="bleed-inset-left py-16 pr-6 lg:col-span-5 lg:py-24 lg:pr-12">
+    <RotuloSecao texto="O Hotel" />
+    <h2 class="text-carvao">Conforto, segurança e hospitalidade mineira.</h2>
+
+    <div class="mt-6 flex flex-col gap-4">
+      {oHotel.paragrafos.map((paragrafo) => <p class="text-verdeCl">{paragrafo}</p>)}
+    </div>
+
+    <div class="mt-10 grid grid-cols-3 gap-6 border-t border-linho pt-8">
+      {
+        oHotel.numeros.map((item) => (
+          <div>
+            <p class="font-display text-2xl text-carvao sm:text-3xl">{item.valor}</p>
+            <p class="mt-1 text-[11px] uppercase tracking-nav text-verdeCl">
+              {item.label}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </Reveal>
+
+  <Reveal indice={1} as="div" class="relative h-[420px] lg:col-span-7 lg:h-[640px]">
+    <Picture
+      src={recepcaoImg}
+      alt={`Recepção do ${hotel.nome}`}
+      formats={["avif", "webp"]}
+      widths={[480, 800, 1200]}
+      sizes="(min-width: 1024px) 58vw, 100vw"
+      loading="lazy"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+  </Reveal>
+</section>

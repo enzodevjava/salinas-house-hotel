@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import Hero from "../components/sections/Hero.astro";
+import QuickBar from "../components/sections/QuickBar.astro";
+import OHotel from "../components/sections/OHotel.astro";
+import Estrutura from "../components/sections/Estrutura.astro";
+import Teasers from "../components/sections/Teasers.astro";
+import Faq from "../components/sections/Faq.astro";
+import Contato from "../components/sections/Contato.astro";
+import JsonLd from "../components/seo/JsonLd.astro";
+import FaqJsonLd from "../components/seo/FaqJsonLd.astro";
+
+const title =
+  "Salinas House Hotel — Hospedagem em Salinas, MG | BR-251 Km 313";
+const description =
+  "Salinas House Hotel: conforto, segurança e hospitalidade em Salinas - MG, a Cidade Mundial da Cachaça. Quartos Deluxe e Suíte Presidencial, café da manhã incluso e bar com cachaças artesanais.";
+---
+
+<Base title={title} description={description}>
+  <JsonLd slot="head" />
+  <FaqJsonLd slot="head" />
+  <Header transparente />
+  <main id="conteudo-principal">
+    <Hero />
+    <QuickBar />
+    <OHotel />
+    <Estrutura />
+    <Teasers />
+    <Faq />
+    <Contato />
+  </main>
+  <Footer />
+</Base>

@@ -1,0 +1,86 @@
+---
+import { Picture } from "astro:assets";
+import restauranteImg from "../../assets/images/restaurante/restaurante-bar.jpg";
+import restauranteSalaImg from "../../assets/images/restaurante/restaurante-sala.jpg";
+import barCachacasImg from "../../assets/images/restaurante/bar-cachacas.jpg";
+import hotel from "../../content/hotel.json";
+import RotuloSecao from "../ui/RotuloSecao.astro";
+import Reveal from "../ui/Reveal.astro";
+import Botao from "../ui/Botao.astro";
+import { linkWhatsApp, MENSAGENS } from "../../lib/whatsapp";
+
+const { restaurante, bar } = hotel.restauranteBar;
+---
+
+<section id="restaurante">
+  <Reveal as="div" class="relative h-[70vh] w-full overflow-hidden">
+    <Picture
+      src={restauranteImg}
+      alt={`Restaurante e bar do ${hotel.nome}`}
+      formats={["avif", "webp"]}
+      widths={[768, 1280, 1920, 2400]}
+      sizes="100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="absolute inset-0 h-full w-full object-cover"
+    />
+    <div
+      class="absolute inset-0"
+      style="background: linear-gradient(to top, rgba(28,26,23,.55), rgba(28,26,23,0) 45%)"
+      aria-hidden="true"
+    >
+    </div>
+
+    <div class="absolute inset-x-0 bottom-0">
+      <div class="container-page pb-10">
+        <div class="ml-auto max-w-md bg-osso p-8 sm:p-10">
+          <RotuloSecao texto="Restaurante & Bar" />
+          <h2 class="text-carvao">Sabor e convivência mineira.</h2>
+        </div>
+      </div>
+    </div>
+  </Reveal>
+
+  <div class="secao container-page grid grid-cols-1 gap-12 lg:grid-cols-2">
+    <Reveal>
+      <div class="relative mb-6 aspect-[4/3] w-full overflow-hidden">
+        <Picture
+          src={restauranteSalaImg}
+          alt={`Sala do restaurante do ${hotel.nome}`}
+          formats={["avif", "webp"]}
+          widths={[400, 700]}
+          sizes="(min-width: 1024px) 42vw, 100vw"
+          loading="lazy"
+          class="absolute inset-0 h-full w-full object-cover"
+        />
+      </div>
+      <h3 class="text-carvao">{restaurante.titulo}</h3>
+      <p class="mt-4 text-verdeCl">{restaurante.texto}</p>
+    </Reveal>
+
+    <Reveal indice={1}>
+      <div class="relative mb-6 aspect-[4/3] w-full overflow-hidden">
+        <Picture
+          src={barCachacasImg}
+          alt={`Bar de cachaças artesanais do ${hotel.nome}`}
+          formats={["avif", "webp"]}
+          widths={[400, 700]}
+          sizes="(min-width: 1024px) 42vw, 100vw"
+          loading="lazy"
+          class="absolute inset-0 h-full w-full object-cover"
+        />
+      </div>
+      <RotuloSecao texto="O destino" />
+      <h3 class="text-carvao">{bar.titulo}</h3>
+      <p class="mt-4 text-verdeCl">{bar.texto}</p>
+
+      <Botao
+        href={linkWhatsApp(MENSAGENS.restaurante)}
+        target="_blank"
+        class="mt-8"
+      >
+        Reserve sua mesa
+      </Botao>
+    </Reveal>
+  </div>
+</section>

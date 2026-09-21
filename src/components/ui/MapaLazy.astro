@@ -1,0 +1,71 @@
+---
+interface Props {
+  embedUrl: string;
+  titulo?: string;
+}
+
+const { embedUrl, titulo = "Mapa de localização do hotel" } = Astro.props;
+---
+
+<div
+  id="mapa-lazy"
+  data-embed-url={embedUrl}
+  data-titulo={titulo}
+  class="relative h-[420px] w-full overflow-hidden bg-linho lg:h-[520px]"
+>
+  <button
+    type="button"
+    id="mapa-lazy-trigger"
+    class="absolute inset-0 flex w-full flex-col items-center justify-center gap-3 text-verde transition-colors hover:text-verdeEsc"
+    aria-label={`Carregar ${titulo}`}
+  >
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M12 21s7-6.4 7-11.6A7 7 0 0 0 5 9.4C5 14.6 12 21 12 21Z"
+        stroke="currentColor"
+        stroke-width="1.5"
+      />
+      <circle cx="12" cy="9.4" r="2.4" stroke="currentColor" stroke-width="1.5" />
+    </svg>
+    <span class="text-[11px] uppercase tracking-nav">Ver mapa</span>
+  </button>
+</div>
+
+<script>
+  const container = document.getElementById("mapa-lazy");
+  const botao = document.getElementById("mapa-lazy-trigger");
+
+  if (container && botao) {
+    let carregado = false;
+
+    const carregar = () => {
+      if (carregado) return;
+      carregado = true;
+
+      const src = container.dataset.embedUrl;
+      const titulo = container.dataset.titulo ?? "Mapa";
+      if (!src) return;
+
+      const iframe = document.createElement("iframe");
+      iframe.src = src;
+      iframe.loading = "lazy";
+      iframe.title = titulo;
+      iframe.referrerPolicy = "no-referrer-when-downgrade";
+      iframe.className = "absolute inset-0 h-full w-full border-0";
+
+      container.replaceChildren(iframe);
+      observer.disconnect();
+    };
+
+    botao.addEventListener("click", carregar);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) carregar();
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(container);
+  }
+</script>

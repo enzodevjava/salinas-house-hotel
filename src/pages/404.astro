@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import Botao from "../components/ui/Botao.astro";
+import hotel from "../content/hotel.json";
+import { linkWhatsApp, MENSAGENS } from "../lib/whatsapp";
+
+const title = `Página não encontrada — ${hotel.nome}`;
+const description = `A página que você procura não existe no site do ${hotel.nome}.`;
+---
+
+<Base title={title} description={description}>
+  <Header />
+  <main id="conteudo-principal">
+    <section class="flex min-h-[100dvh] items-center">
+      <div class="container-page py-32 text-center">
+        <span class="rotulo-secao">Erro 404</span>
+        <h1 class="text-carvao">Essa página não existe.</h1>
+        <p class="mx-auto mt-4 max-w-md text-verdeCl">
+          Mas o {hotel.nome} existe, e está te esperando. Volte para a home ou
+          fale com a gente pelo WhatsApp.
+        </p>
+
+        <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <Botao href="/">Voltar para a home</Botao>
+          <Botao href={linkWhatsApp(MENSAGENS.flutuante)} target="_blank" variante="secundario">
+            Falar no WhatsApp
+          </Botao>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

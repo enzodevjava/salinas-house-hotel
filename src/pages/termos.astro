@@ -1,0 +1,82 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import hotel from "../content/hotel.json";
+
+const title = `Termos de Uso — ${hotel.nome}`;
+const description = `Termos de uso do site do ${hotel.nome}.`;
+
+const proseClasses =
+  "prose max-w-none prose-headings:font-display prose-headings:font-normal prose-headings:text-carvao prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-p:text-verdeCl prose-li:text-verdeCl prose-a:text-verde prose-a:no-underline hover:prose-a:text-verdeEsc hover:prose-a:underline prose-strong:text-carvao";
+---
+
+<Base title={title} description={description}>
+  <Header />
+  <main id="conteudo-principal">
+    <section class="secao container-page max-w-3xl">
+      <span class="rotulo-secao">Legal</span>
+      <h1 class="text-carvao">Termos de Uso</h1>
+      <p class="mt-4 text-sm text-verdeCl">Última atualização: janeiro de 2026.</p>
+
+      <div class={`mt-10 ${proseClasses}`}>
+        <p>
+          Ao acessar e utilizar o site do {hotel.nome}, você concorda com os
+          termos abaixo.
+        </p>
+
+        <h2>1. Sobre o site</h2>
+        <p>
+          Este site tem caráter informativo institucional, apresentando as
+          acomodações, a estrutura e os serviços do {hotel.nome}, em Salinas,
+          Minas Gerais. Não processamos reservas nem pagamentos diretamente
+          pelo site — reservas são feitas via WhatsApp ou pela plataforma
+          Booking.com.
+        </p>
+
+        <h2>2. Uso do conteúdo</h2>
+        <p>
+          Todo o conteúdo deste site (textos, imagens, identidade visual)
+          pertence ao {hotel.nome} ou é utilizado sob licença. Não é
+          permitida a reprodução, distribuição ou uso comercial do conteúdo
+          sem autorização prévia.
+        </p>
+
+        <h2>3. Disponibilidade e preços</h2>
+        <p>
+          As informações sobre acomodações e estrutura apresentadas neste
+          site têm caráter informativo e estão sujeitas a alterações sem
+          aviso prévio. Disponibilidade e valores de diárias devem ser
+          confirmados diretamente com o hotel no momento da reserva.
+        </p>
+
+        <h2>4. Links externos</h2>
+        <p>
+          Este site contém links para serviços de terceiros, como WhatsApp,
+          Instagram, Google Maps e Booking.com. Não nos responsabilizamos
+          pelo conteúdo ou pelas práticas de privacidade desses serviços
+          externos.
+        </p>
+
+        <h2>5. Limitação de responsabilidade</h2>
+        <p>
+          Fazemos o possível para manter as informações deste site
+          atualizadas e corretas, mas não garantimos a ausência total de
+          erros. Em caso de divergência entre o site e a reserva confirmada,
+          prevalece o que foi acordado diretamente com o hotel.
+        </p>
+
+        <h2>6. Alterações destes termos</h2>
+        <p>
+          Estes termos podem ser atualizados a qualquer momento. O uso
+          contínuo do site após alterações implica na aceitação dos novos
+          termos.
+        </p>
+
+        <h2>7. Contato</h2>
+        <p>Dúvidas sobre estes termos podem ser enviadas para <a href={`mailto:${hotel.email}`}>{hotel.email}</a>.</p>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

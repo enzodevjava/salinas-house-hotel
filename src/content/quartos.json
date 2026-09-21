@@ -1,0 +1,108 @@
+[
+  {
+    "slug": "suite-presidencial",
+    "nome": "Suíte Presidencial",
+    "destaque": true,
+    "descricao": "Luxo e exclusividade em um ambiente sofisticado, para quem busca conforto absoluto.",
+    "specs": [
+      "Cama king-size",
+      "Sala de estar",
+      "Sala de jantar",
+      "Banheiro com jacuzzi",
+      "Área externa privativa",
+      "Sauna exclusiva",
+      "Room service",
+      "Wi-Fi de alta velocidade"
+    ],
+    "galeria": [
+      { "arquivo": "suite-presidencial-01.jpg", "alt": "Ambiente da Suíte Presidencial com cama, sala de estar e copa — Salinas House Hotel" },
+      { "arquivo": "suite-presidencial-02.jpg", "alt": "Cama king-size da Suíte Presidencial — Salinas House Hotel" },
+      { "arquivo": "suite-presidencial-03.jpg", "alt": "Sala de estar da Suíte Presidencial — Salinas House Hotel" },
+      { "arquivo": "suite-presidencial-04.jpg", "alt": "Sala de jantar da Suíte Presidencial — Salinas House Hotel" },
+      { "arquivo": "suite-presidencial-05.jpg", "alt": "Banheiro com jacuzzi da Suíte Presidencial — Salinas House Hotel" },
+      { "arquivo": "suite-presidencial-06.jpg", "alt": "Sauna exclusiva da Suíte Presidencial — Salinas House Hotel" },
+      { "arquivo": "suite-presidencial-07.jpg", "alt": "Área externa privativa da Suíte Presidencial — Salinas House Hotel" }
+    ]
+  },
+  {
+    "slug": "individual-deluxe",
+    "nome": "Quarto Individual Deluxe",
+    "destaque": false,
+    "descricao": "Estadia confortável e prática, com mesa de trabalho para quem precisa unir viagem e produtividade.",
+    "specs": [
+      "Cama de casal",
+      "TV",
+      "Banheiro privativo",
+      "Mesa de trabalho",
+      "Wi-Fi",
+      "Até 1–2 hóspedes"
+    ],
+    "galeria": [
+      { "arquivo": "individual-deluxe-01.jpg", "alt": "Cama do Quarto Individual Deluxe — Salinas House Hotel" },
+      { "arquivo": "individual-deluxe-02.jpg", "alt": "Ambiente do Quarto Individual Deluxe com mesa de trabalho — Salinas House Hotel" },
+      { "arquivo": "individual-deluxe-03.jpg", "alt": "Cama do Quarto Individual Deluxe — Salinas House Hotel" },
+      { "arquivo": "individual-deluxe-04.jpg", "alt": "Vista geral do Quarto Individual Deluxe — Salinas House Hotel" },
+      { "arquivo": "individual-deluxe-05.jpg", "alt": "Cama do Quarto Individual Deluxe com iluminação ambiente — Salinas House Hotel" }
+    ]
+  },
+  {
+    "slug": "duplo-deluxe",
+    "nome": "Quarto Duplo Deluxe",
+    "destaque": false,
+    "descricao": "Para casais e viajantes que buscam conforto e praticidade em um ambiente acolhedor.",
+    "specs": [
+      "Cama de casal",
+      "Colchão de alta qualidade",
+      "TV",
+      "Banheiro privativo moderno",
+      "Wi-Fi",
+      "Até 2 hóspedes"
+    ],
+    "galeria": [
+      { "arquivo": "duplo-deluxe-01.jpg", "alt": "Cama de casal do Quarto Duplo Deluxe — Salinas House Hotel" },
+      { "arquivo": "duplo-deluxe-02.jpg", "alt": "Ambiente do Quarto Duplo Deluxe — Salinas House Hotel" },
+      { "arquivo": "duplo-deluxe-03.jpg", "alt": "Ambiente do Quarto Duplo Deluxe — Salinas House Hotel" },
+      { "arquivo": "duplo-deluxe-04.jpg", "alt": "Cama de casal do Quarto Duplo Deluxe com teto decorado — Salinas House Hotel" }
+    ]
+  },
+  {
+    "slug": "triplo-deluxe",
+    "nome": "Quarto Triplo Deluxe",
+    "destaque": false,
+    "descricao": "Ideal para famílias ou pequenos grupos, elegante e funcional.",
+    "specs": [
+      "1 cama de casal + 1 de solteiro",
+      "TV",
+      "Banheiro privativo",
+      "Mesa de trabalho",
+      "Wi-Fi",
+      "Até 3 hóspedes"
+    ],
+    "galeria": [
+      { "arquivo": "triplo-deluxe-01.jpg", "alt": "Ambiente do Quarto Triplo Deluxe — Salinas House Hotel" },
+      { "arquivo": "triplo-deluxe-02.jpg", "alt": "Ambiente do Quarto Triplo Deluxe — Salinas House Hotel" },
+      { "arquivo": "triplo-deluxe-03.jpg", "alt": "Banheiro privativo do Quarto Triplo Deluxe — Salinas House Hotel" },
+      { "arquivo": "triplo-deluxe-04.jpg", "alt": "As duas camas do Quarto Triplo Deluxe — Salinas House Hotel" }
+    ]
+  },
+  {
+    "slug": "quadruplo-deluxe",
+    "nome": "Quarto Quádruplo Deluxe",
+    "destaque": false,
+    "descricao": "Espaçoso, para famílias ou grupos de até quatro pessoas.",
+    "specs": [
+      "1 cama de casal + 2 de solteiro",
+      "TV",
+      "Banheiro privativo",
+      "Mesa de trabalho",
+      "Wi-Fi",
+      "Até 4 hóspedes"
+    ],
+    "galeria": [
+      { "arquivo": "quadruplo-deluxe-01.jpg", "alt": "Camas do Quarto Quádruplo Deluxe — Salinas House Hotel" },
+      { "arquivo": "quadruplo-deluxe-02.jpg", "alt": "Ambiente do Quarto Quádruplo Deluxe — Salinas House Hotel" },
+      { "arquivo": "quadruplo-deluxe-03.jpg", "alt": "Camas do Quarto Quádruplo Deluxe — Salinas House Hotel" },
+      { "arquivo": "quadruplo-deluxe-04.jpg", "alt": "As três camas do Quarto Quádruplo Deluxe — Salinas House Hotel" }
+    ]
+  }
+]
