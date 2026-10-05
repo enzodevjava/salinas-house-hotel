@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import hotel from "../../content/hotel.json";
 import Botao from "../ui/Botao.astro";
 import MobileMenu from "./MobileMenu.tsx";
+import { linkReservar } from "../../lib/reserva";
 import logoClaro from "../../assets/images/logo/logo-claro.png";
 import logoEscuro from "../../assets/images/logo/logo-escuro.png";
 
@@ -76,7 +77,7 @@ const ancorasHome = hotel.navegacao
 
     <div class="flex items-center gap-5">
       <div class="hidden sm:block">
-        <Botao href="/reservar" compacto>
+        <Botao href={linkReservar()} compacto>
           Reservar
         </Botao>
       </div>

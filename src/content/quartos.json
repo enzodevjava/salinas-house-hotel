@@ -16,11 +16,7 @@
     ],
     "galeria": [
       { "arquivo": "suite-presidencial-01.jpg", "alt": "Ambiente da Suíte Presidencial com cama, sala de estar e copa — Salinas House Hotel" },
-      { "arquivo": "suite-presidencial-02.jpg", "alt": "Cama king-size da Suíte Presidencial — Salinas House Hotel" },
       { "arquivo": "suite-presidencial-03.jpg", "alt": "Sala de estar da Suíte Presidencial — Salinas House Hotel" },
-      { "arquivo": "suite-presidencial-04.jpg", "alt": "Sala de jantar da Suíte Presidencial — Salinas House Hotel" },
-      { "arquivo": "suite-presidencial-05.jpg", "alt": "Banheiro com jacuzzi da Suíte Presidencial — Salinas House Hotel" },
-      { "arquivo": "suite-presidencial-06.jpg", "alt": "Sauna exclusiva da Suíte Presidencial — Salinas House Hotel" },
       { "arquivo": "suite-presidencial-07.jpg", "alt": "Área externa privativa da Suíte Presidencial — Salinas House Hotel" }
     ]
   },
@@ -81,7 +77,6 @@
     "galeria": [
       { "arquivo": "triplo-deluxe-01.jpg", "alt": "Ambiente do Quarto Triplo Deluxe — Salinas House Hotel" },
       { "arquivo": "triplo-deluxe-02.jpg", "alt": "Ambiente do Quarto Triplo Deluxe — Salinas House Hotel" },
-      { "arquivo": "triplo-deluxe-03.jpg", "alt": "Banheiro privativo do Quarto Triplo Deluxe — Salinas House Hotel" },
       { "arquivo": "triplo-deluxe-04.jpg", "alt": "As duas camas do Quarto Triplo Deluxe — Salinas House Hotel" }
     ]
   },

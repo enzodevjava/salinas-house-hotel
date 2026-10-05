@@ -7,6 +7,9 @@ import hotel from "../content/hotel.json";
 import quartos from "../content/quartos.json";
 import { linkWhatsApp, MENSAGENS } from "../lib/whatsapp";
 
+// Com o motor de reservas do PMS configurado, /reservar só redireciona pra ele.
+if (hotel.motorReservas) return Astro.redirect(hotel.motorReservas);
+
 const title = `Reservar — ${hotel.nome}`;
 const description = `Faça o pedido da sua reserva no ${hotel.nome} diretamente pelo site — escolha o quarto, as datas e envie pra nossa equipe confirmar pelo WhatsApp.`;
 
@@ -137,12 +140,14 @@ const rotuloClasses = "text-[11px] uppercase tracking-nav text-verdeCl";
 
 <script>
   import { linkWhatsApp, mensagemReserva } from "../lib/whatsapp";
+  import { dataLocal } from "../lib/reserva";
 
   const form = document.getElementById("form-reserva") as HTMLFormElement | null;
   const checkin = document.getElementById("checkin") as HTMLInputElement | null;
   const checkout = document.getElementById("checkout") as HTMLInputElement | null;
 
-  const hoje = new Date().toISOString().split("T")[0];
+  // Fuso do navegador: toISOString usa UTC e, à noite no Brasil, já daria o dia seguinte.
+  const hoje = dataLocal(new Date());
 
   // Dropdown customizado do quarto (role="listbox" + aria-activedescendant)
   const quartoTrigger = document.getElementById("quarto-trigger") as HTMLButtonElement | null;
@@ -270,9 +275,8 @@ const rotuloClasses = "text-[11px] uppercase tracking-nav text-verdeCl";
 
     checkin.addEventListener("change", () => {
       if (!checkin.value) return;
-      const proximoDia = new Date(checkin.value);
-      proximoDia.setDate(proximoDia.getDate() + 1);
-      const minCheckout = proximoDia.toISOString().split("T")[0];
+      const [ano, mes, dia] = checkin.value.split("-").map(Number);
+      const minCheckout = dataLocal(new Date(ano, mes - 1, dia + 1));
       checkout.min = minCheckout;
       if (checkout.value && checkout.value <= checkin.value) {
         checkout.value = minCheckout;

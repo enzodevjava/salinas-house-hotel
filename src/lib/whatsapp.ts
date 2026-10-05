@@ -18,6 +18,7 @@ export const MENSAGENS = {
   salinas: "Olá! Gostaria de informações sobre hospedagem e passeios em Salinas.",
   eventos: "Olá! Gostaria de informações sobre realizar um evento no hotel.",
   flutuante: "Olá! Vim pelo site e gostaria de mais informações.",
+  duvida: (pergunta: string) => `Olá! Vim pelo site e tenho uma dúvida: ${pergunta}`,
 } as const;
 
 interface DadosReserva {
@@ -26,7 +27,7 @@ interface DadosReserva {
   checkout: string;
   hospedes: string;
   nome: string;
-  telefone: string;
+  telefone?: string;
   email?: string;
 }
 
@@ -47,8 +48,8 @@ export function mensagemReserva(dados: DadosReserva): string {
     `Check-out: ${formatarDataBR(dados.checkout)}`,
     `Hóspedes: ${dados.hospedes}`,
     `Nome: ${dados.nome}`,
-    `Telefone: ${dados.telefone}`,
   ];
+  if (dados.telefone) linhas.push(`Telefone: ${dados.telefone}`);
   if (dados.email) linhas.push(`E-mail: ${dados.email}`);
   return linhas.join("\n");
 }

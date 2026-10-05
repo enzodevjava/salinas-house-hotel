@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Galeria, { type ImagemGaleria } from "./Galeria";
+import { linkReservar } from "../../lib/reserva";
 
 export interface QuartoComImagens {
   slug: string;
@@ -157,7 +158,7 @@ export default function AbasQuartos({ quartos }: AbasQuartosProps) {
               </ul>
 
               <a
-                href={`/reservar?quarto=${encodeURIComponent(quarto.nome)}`}
+                href={linkReservar(quarto.nome)}
                 className="mt-8 inline-flex items-center justify-center gap-2 bg-verde px-9 py-4 text-xs font-medium uppercase tracking-nav text-osso transition-colors duration-[250ms] hover:bg-verdeEsc"
               >
                 {quarto.destaque ? "Reserve a suíte" : "Reserve seu quarto"}

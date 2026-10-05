@@ -3,6 +3,7 @@ import { getImage } from "astro:assets";
 import hotel from "../../content/hotel.json";
 import quartos from "../../content/quartos.json";
 import estrutura from "../../content/estrutura.json";
+import { ocupacaoQuarto } from "../../lib/quartos";
 import heroImg from "../../assets/images/hero/hero-aerial-hd.jpg";
 import recepcaoImg from "../../assets/images/hotel/recepcao.jpg";
 
@@ -21,15 +22,10 @@ const amenityFeature = estrutura.map((item) => ({
 }));
 
 const extrairOcupacao = (specs: string[]) => {
-  for (const spec of specs) {
-    const match = spec.match(/Até\s+(\d+)(?:[–-](\d+))?\s+h[oó]spedes/i);
-    if (match) {
-      const min = Number(match[1]);
-      const max = match[2] ? Number(match[2]) : min;
-      return { "@type": "QuantitativeValue", minValue: min, maxValue: max };
-    }
-  }
-  return undefined;
+  const ocupacao = ocupacaoQuarto(specs);
+  return ocupacao
+    ? { "@type": "QuantitativeValue", minValue: ocupacao.min, maxValue: ocupacao.max }
+    : undefined;
 };
 
 const hotelRooms = quartos.map((quarto) => {

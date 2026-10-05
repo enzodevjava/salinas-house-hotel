@@ -1,6 +1,6 @@
 ---
 import "../styles/global.css";
-import WhatsAppFloat from "../components/layout/WhatsAppFloat.astro";
+import Will from "../components/layout/Will.tsx";
 
 interface Props {
   title: string;
@@ -64,6 +64,6 @@ const ogImageURL = new URL(ogImage, Astro.site);
   <body>
     <a href="#conteudo-principal" class="skip-link">Pular para o conteÃºdo</a>
     <slot />
-    <WhatsAppFloat />
+    <Will client:visible />
   </body>
 </html>

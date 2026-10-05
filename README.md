@@ -33,7 +33,7 @@ npx astro check   # checagem de tipos
 ## Como editar os textos
 
 **Nenhum texto do site está escrito dentro dos componentes.** Tudo vem de
-quatro arquivos JSON em `src/content/`:
+arquivos JSON em `src/content/`:
 
 | Arquivo | O que controla |
 |---|---|
@@ -41,6 +41,8 @@ quatro arquivos JSON em `src/content/`:
 | `quartos.json` | Os 5 tipos de quarto: nome, descrição, lista de specs e legendas das fotos de cada galeria. |
 | `estrutura.json` | As comodidades do hotel (grid numerado da seção Estrutura + os 5 itens em destaque na barra de sinais rápidos logo abaixo do hero). |
 | `salinas.json` | O parágrafo de introdução e as 5 atrações da região. |
+| `faq.json` | Perguntas frequentes (seção de dúvidas do site). O Will também responde a partir delas. |
+| `will.json` | Falas do Will, o assistente virtual do canto da tela, e as palavras e sinônimos que ele reconhece. |
 
 Editar qualquer um desses arquivos e salvar já atualiza o conteúdo — não
 precisa mexer em nenhum arquivo `.astro` ou `.tsx` pra trocar uma frase, uma
@@ -53,10 +55,9 @@ site.
 
 ## Como trocar as fotos
 
-Todas as fotos do site são **placeholders** (retângulos coloridos com o nome
-do arquivo escrito em cima) até as fotos reais chegarem. A lista completa,
-com nome de arquivo exato, proporção esperada e uma linha do que deve
-aparecer em cada uma, está em **[`IMAGENS.md`](./IMAGENS.md)**.
+A lista completa das fotos, com nome de arquivo exato, proporção esperada e
+uma linha do que deve aparecer em cada uma, está em
+**[`IMAGENS.md`](./IMAGENS.md)**.
 
 Resumo rápido:
 
@@ -77,6 +78,41 @@ Resumo rápido:
 > de performance do site). Como o site é estático, trocar uma foto exige
 > redeploy de qualquer forma, então não há vantagem prática em usar
 > `public/` aqui.
+
+## Will, o assistente virtual
+
+O balão "Fale com o Will" no canto da tela (`src/components/layout/Will.tsx`)
+tira dúvidas e monta o pedido de reserva, que sai pronto pro WhatsApp da
+recepção. Ele **não usa IA**: responde com o conteúdo de `faq.json`,
+`hotel.json` e `quartos.json`, e reconhece as palavras listadas em
+`will.json`. O que ele não sabe responder vira uma pergunta pronta pro
+WhatsApp. Pra ele responder algo novo, basta adicionar a pergunta em
+`faq.json` (e, se precisar, um sinônimo em `will.json`).
+
+Custo: zero. Ligar uma IA de verdade depois exige uma API paga (ou um plano
+gratuito com limites) e um pequeno servidor pra guardar a chave.
+
+## Como ligar o motor de reservas do PMS
+
+Hoje a reserva é um pedido: o formulário de `/reservar` monta a mensagem e
+abre o WhatsApp da recepção. Quando o hotel contratar um PMS (Hospedin,
+Cloudbeds etc.), coloque a URL do motor de reservas dele em
+`hotel.json → motorReservas`:
+
+```json
+"motorReservas": "https://url-do-motor-de-reservas-do-pms"
+```
+
+Com isso, o botão "Reservar" do header e do menu mobile e os botões dos
+quartos passam a levar direto para o motor, e `/reservar` redireciona pra
+ele. Para voltar ao formulário do WhatsApp, deixe o campo como `null`.
+
+Quando o PMS entrar, atualize também a política de privacidade e os termos:
+eles dizem hoje que o site não processa reservas nem guarda dados.
+
+O sistema de reservas próprio que chegou a ser construído (banco Neon,
+painel `/admin`, área `/minha-conta`) está guardado no branch
+`sistema-reservas-proprio`, caso precise ser consultado.
 
 ## Como fazer deploy (Vercel)
 
@@ -103,15 +139,15 @@ Resumo rápido:
 ```
 src/
   components/
-    layout/      Header, menu mobile, footer, botão flutuante de WhatsApp
+    layout/      Header, menu mobile, footer, Will (assistente virtual)
     sections/    Um bloco de conteúdo por arquivo (Hero, Acomodações, etc.) —
                  cada um é usado por uma página específica em src/pages/
     seo/         Dados estruturados (JSON-LD)
     ui/          Componentes reutilizáveis (botão, rótulo de seção, galeria,
                  card-resumo...)
-  content/       Os 4 JSONs de conteúdo — ver seção acima
+  content/       Os JSONs de conteúdo — ver seção acima
   layouts/       Layout base (head, fontes, meta tags)
-  lib/           Helper de link do WhatsApp
+  lib/           Helpers de link do WhatsApp e do botão "Reservar"
   pages/         Uma rota por arquivo: home, acomodacoes, restaurante,
                  salinas, eventos, reservar, política de privacidade, termos, 404
   styles/        Tokens de design e estilos globais (Tailwind v4, config em CSS)

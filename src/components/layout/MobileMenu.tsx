@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import hotel from "../../content/hotel.json";
 import { linkWhatsApp, MENSAGENS } from "../../lib/whatsapp";
+import { linkReservar } from "../../lib/reserva";
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -118,7 +119,7 @@ export default function MobileMenu() {
               </a>
             ))}
             <a
-              href="/reservar"
+              href={linkReservar()}
               onClick={() => setAberto(false)}
               className="mt-4 inline-flex w-fit items-center justify-center gap-2 bg-osso px-8 py-3.5 text-xs font-medium uppercase tracking-nav text-verdeEsc transition-colors hover:bg-cobreClaro"
             >

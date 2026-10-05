@@ -8,7 +8,19 @@ CTAs por seção e os critérios de aceite de performance/acessibilidade. Este
 arquivo aqui só descreve **o que já foi feito** e **o que falta**, não repete
 a spec inteira.
 
-## Estado atual: Blocos A, B e C 100% prontos. Bloco D em andamento.
+## Estado atual (outubro/2026): site institucional pronto, reservas a caminho de um PMS
+
+Blocos A a D concluídos: páginas satélite, `README.md`, `IMAGENS.md` e fotos
+reais já estão no projeto.
+
+**Decisão sobre reservas:** o hotel vai contratar um PMS com channel manager
+(Hospedin ou Cloudbeds), possivelmente com IA de atendimento no WhatsApp
+(Asksuite). Por isso:
+- o sistema de reservas próprio (Neon, `/admin`, `/minha-conta`, `/api/*`) foi
+  **guardado no branch `sistema-reservas-proprio`** e não está no `main`;
+- o `main` continua 100% estático e `/reservar` envia o pedido pelo WhatsApp;
+- quando o PMS for contratado, basta preencher `hotel.json → motorReservas`
+  com a URL do motor de reservas (ver `src/lib/reserva.ts` e o README).
 
 O projeto já roda (`npm install && npm run dev`), builda sem erros
 (`npm run build`) e passa `npx astro check` com 0 erros. Antes de continuar,
@@ -16,7 +28,7 @@ rode essas três coisas pra confirmar que nada quebrou na cópia/transferência.
 
 ### O que já existe
 
-- **Stack**: Astro 7 (static output), React só em 2 ilhas (`MobileMenu.tsx`,
+- **Stack**: Astro 7 (static output), React em 3 ilhas, o máximo permitido (`Will.tsx`, o assistente virtual; `MobileMenu.tsx`;
   `AbasQuartos.tsx` que renderiza `Galeria.tsx`), Tailwind v4, `@astrojs/sitemap`.
 - **Tailwind v4 é CSS-first**: os tokens de cor/tipografia NÃO estão em
   `tailwind.config.mjs` — estão no bloco `@theme` dentro de
@@ -35,9 +47,7 @@ rode essas três coisas pra confirmar que nada quebrou na cópia/transferência.
   `public/` é servido cru, sem otimização. Como o site é estático (build +
   deploy), trocar foto dá o mesmo trabalho em qualquer uma das duas pastas —
   então priorizei a que cumpre as metas de performance da seção 9.
-- **Todas as fotos são placeholders gerados** (retângulo colorido com nome do
-  arquivo + dimensões escritas em cima), nomeados corretamente, esperando as
-  fotos reais do cliente.
+- **Fotos reais** do hotel já substituíram os placeholders (lista em `IMAGENS.md`).
 - **Tokens de cor extras** que não estavam na spec original, criados durante a
   auditoria de acessibilidade porque o `cobre` puro (`#A97142`) não passa
   contraste AA em texto pequeno:
@@ -49,10 +59,9 @@ rode essas três coisas pra confirmar que nada quebrou na cópia/transferência.
   sangrarem até a borda da viewport (100vw) mantendo o texto alinhado ao
   container de 1440px. Usado em `OHotel.astro`. Reaproveitar se precisar de
   mais blocos full-bleed.
-- **`Astro.site`** está setado como `https://salinas-house-hotel.vercel.app`
-  em `astro.config.mjs` — é um placeholder (é a URL do protótipo antigo
-  mencionado na spec). **Trocar pelo domínio real quando o cliente definir um**,
-  porque `sitemap.xml`, `canonical`, JSON-LD e OG tags todos dependem disso.
+- **`Astro.site`** está como `https://salinas-house-hotel-one.vercel.app`
+  em `astro.config.mjs`. **Trocar pelo domínio próprio quando houver um**,
+  porque `sitemap.xml`, `canonical`, JSON-LD e OG tags dependem disso.
 - **JSON-LD** (`src/components/seo/JsonLd.astro`) já implementado: schema.org
   `Hotel` completo + `HotelRoom` pra cada um dos 5 quartos (com `occupancy`
   extraído via regex das specs tipo "Até 2 hóspedes" — a Suíte Presidencial
@@ -74,60 +83,24 @@ rode essas três coisas pra confirmar que nada quebrou na cópia/transferência.
   4. Contraste insuficiente em texto `osso/50` sobre `verdeEsc` (Footer e
      Contato) — subido pra `osso/60`.
 
-### Último Lighthouse rodado (antes das correções de acessibilidade acima)
+### Último Lighthouse (outubro/2026, mobile, contra `npm run preview`)
 
-Contra o build de produção (`npm run build && npm run preview`), mobile:
+| Página | Performance | Acessibilidade | Best Practices | SEO | LCP | CLS |
+|---|---|---|---|---|---|---|
+| Home | 95 | 100 | 100 | 100 | 2.8s | 0.013 |
+| /reservar | 98 | 100 | 100 | 100 | 2.3s | 0.012 |
 
-| Métrica | Resultado |
-|---|---|
-| Performance | 99 |
-| Accessibility | 93 (ainda não revalidado depois do fix) |
-| Best Practices | 100 |
-| SEO | 100 |
-| LCP | 1.7s |
-| CLS | 0.013 |
-| TBT | 30ms |
+## O que falta
 
-**Os dois findings de acessibilidade (aria-controls inválido + contraste)
-já foram corrigidos no código**, mas o Lighthouse não foi re-rodado depois
-da correção porque a sessão foi interrompida. **Primeira coisa a fazer:**
-rodar de novo e confirmar que bateu 100 em acessibilidade.
-
-## O que falta (Bloco D, a partir daqui)
-
-1. **Revalidar Lighthouse** (mobile, contra `npm run preview` do build de
-   produção) depois das correções de acessibilidade. Se ainda faltar algo,
-   inspecionar `categories.accessibility.auditRefs` no JSON de saída do
-   `lighthouse` CLI pra achar o quê.
-2. **Páginas satélite** (nenhuma existe ainda, só `src/pages/index.astro`):
-   - `src/pages/politica-de-privacidade.astro` — escrever do zero pra
-     hotelaria/LGPD (não usar texto de e-commerce). Cobrir: dados coletados
-     (nome/telefone/mensagem do formulário de contato; dados de navegação),
-     finalidade, base legal, compartilhamento, direitos do titular (art. 18
-     LGPD), contato do controlador (usar `hotel.email`).
-   - `src/pages/termos.astro`.
-   - `src/pages/404.astro` — customizada, com link de volta pra home e CTA
-     de WhatsApp (reaproveitar `linkWhatsApp`/`MENSAGENS.flutuante` de
-     `src/lib/whatsapp.ts`).
-   - Todas devem usar `Base.astro`, ter `Header`/`Footer`, e as duas
-     primeiras precisam de link no `Footer.astro` (já existem os `<a>`
-     apontando pra `/politica-de-privacidade` e `/termos` — só faltam as
-     páginas).
-3. **README.md** — está com o boilerplate genérico do `astro create`, precisa
-   ser reescrito com: como rodar (`npm install && npm run dev`), como trocar
-   as fotos (nome de arquivo + proporção esperada de cada uma — ver
-   `src/content/quartos.json`, `salinas.json`, e os imports em
-   `OHotel.astro`/`RestauranteBar.astro`/`Eventos.astro`), como editar os
-   textos (apontar pros 4 JSONs em `src/content/`), como fazer deploy na
-   Vercel (mencionar que precisa atualizar `site` em `astro.config.mjs` pro
-   domínio real antes do deploy).
-4. **IMAGENS.md** — lista de todas as ~32 fotos necessárias com nome de
-   arquivo exato, proporção e uma linha do que deve aparecer. Ver
-   `src/content/quartos.json` (specs de cada galeria) e os componentes de
-   seção pra pegar a lista completa de imports de imagem.
-5. Depois de tudo isso: build final, `astro check` final, e uma última
-   passada visual (Playwright ou navegador mesmo) pra garantir que nada
-   quebrou.
+1. **Contratar o PMS** e preencher `hotel.json → motorReservas`.
+2. Depois da contratação:
+   - atualizar a política de privacidade e os termos, citando o PMS como
+     operador dos dados (LGPD); hoje eles dizem que o site não guarda dados;
+   - decidir se o "Ver no Booking" do Hero (`Hero.astro`) vira reserva direta;
+   - se o Asksuite entrar, trocar os números em `hotel.json → whatsapp` e
+     decidir se o widget dele substitui o `WhatsAppFloat.astro`;
+   - remover a integração Neon do projeto na Vercel (não é mais usada no `main`).
+3. Definir o domínio próprio e atualizar `site` em `astro.config.mjs`.
 
 ## Regras que não podem ser esquecidas ao continuar
 
