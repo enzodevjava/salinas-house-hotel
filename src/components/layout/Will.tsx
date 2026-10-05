@@ -97,7 +97,33 @@ function buscarFaq(texto: string): string | undefined {
   return melhor?.resposta;
 }
 
-const rotuloHospedes = (n: number) => (n === 1 ? "1 pessoa" : `${n} pessoas`);
+/**
+ * Ornamento da logo do hotel (anel central, linhas finas, anéis e pontos nas pontas).
+ * `compacto` mostra só o anel central com um trecho curto das linhas.
+ */
+function Ornamento({ compacto = false, className = "" }: { compacto?: boolean; className?: string }) {
+  return (
+    <svg
+      viewBox={compacto ? "40 0 40 16" : "0 0 120 16"}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      aria-hidden="true"
+      className={`block shrink-0 ${className}`}
+    >
+      <circle cx="2.5" cy="8" r="1.3" fill="currentColor" stroke="none" />
+      <circle cx="8.5" cy="8" r="2.6" />
+      <path d="M11.1 8H52" />
+      <circle cx="60" cy="8" r="6.6" />
+      <circle cx="60" cy="8" r="4.2" />
+      <path d="M68 8h40.9" />
+      <circle cx="111.5" cy="8" r="2.6" />
+      <circle cx="117.5" cy="8" r="1.3" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+const rotuloHospedes =(n: number) => (n === 1 ? "1 pessoa" : `${n} pessoas`);
 
 export default function Will() {
   const [aberto, setAberto] = useState(false);
@@ -334,16 +360,6 @@ export default function Will() {
     executar(opcao.acao);
   }
 
-  // Selo com o monograma do Will: "W" em Fraunces itálico dentro de um fio cobre.
-  const selo = (classes: string) => (
-    <span
-      aria-hidden="true"
-      className={`flex shrink-0 items-center justify-center rounded-full border border-cobreClaro/70 font-display italic text-cobreClaro ${classes}`}
-    >
-      W
-    </span>
-  );
-
   // Respostas curtas (nº de hóspedes) viram uma grade; o resto, uma lista com seta.
   const opcoesEmGrade = opcoes.length > 0 && opcoes.every((o) => o.rotulo.length <= 9);
 
@@ -361,9 +377,12 @@ export default function Will() {
         aria-expanded={aberto}
         aria-controls="will-painel"
         aria-label={aberto ? `Fechar conversa com o ${will.nome}` : will.chamada}
-        className="fixed bottom-3 right-3 z-40 flex items-center gap-3 border-t-2 border-cobre bg-verdeEsc p-2 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:py-2.5 sm:pl-2.5 sm:pr-5"
+        className="fixed bottom-3 right-3 z-40 flex h-14 items-center gap-4 border-t-2 border-cobre bg-verdeEsc px-3 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:h-auto sm:py-3 sm:pl-4 sm:pr-5"
       >
-        {selo("h-10 w-10 text-xl")}
+        <Ornamento compacto className="w-9 text-cobreClaro sm:w-10" />
+        <span aria-hidden="true" className="-ml-1 text-xs font-medium uppercase tracking-nav sm:hidden">
+          {will.nome}
+        </span>
         <span className="hidden text-left sm:block">
           <span className="block text-[10px] uppercase tracking-label text-cobreClaro">
             {will.rotulo}
@@ -381,11 +400,11 @@ export default function Will() {
         className={`${aberto ? "flex" : "hidden"} fixed inset-x-3 bottom-[4.75rem] z-40 max-h-[min(38rem,calc(100dvh-6.5rem))] flex-col bg-osso shadow-[0_24px_60px_-20px_rgba(28,26,23,0.55)] ring-1 ring-carvao/10 motion-safe:animate-[will-entrada_320ms_var(--ease-reveal)] sm:inset-x-auto sm:bottom-[5.75rem] sm:right-5 sm:w-[24rem]`}
       >
         <header className="bg-verdeEsc px-5 pb-4 pt-5 text-osso">
-          <div className="flex items-center gap-3.5">
-            {selo("h-12 w-12 text-2xl")}
+          <div className="flex items-start gap-3.5">
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] uppercase tracking-label text-cobreClaro">{will.rotulo}</p>
-              <h2 id="will-titulo" className="font-display text-2xl leading-none">
+              <Ornamento className="w-28 text-cobreClaro" />
+              <p className="mt-3 text-[10px] uppercase tracking-label text-cobreClaro">{will.rotulo}</p>
+              <h2 id="will-titulo" className="mt-1 font-display text-3xl leading-none">
                 {will.nome}
               </h2>
             </div>
@@ -400,7 +419,7 @@ export default function Will() {
               </svg>
             </button>
           </div>
-          <p className="mt-3 border-t border-osso/15 pt-3 text-xs text-osso/70">{will.subtitulo}</p>
+          <p className="mt-3 hidden border-t border-osso/15 pt-3 text-xs text-osso/70 sm:block">{will.subtitulo}</p>
         </header>
 
         <div role="log" aria-live="polite" className="flex-1 space-y-4 overflow-y-auto px-5 py-5">
