@@ -1,8 +1,9 @@
 {
   "nome": "Will",
-  "subtitulo": "Assistente virtual do Salinas House",
+  "rotulo": "Assistente virtual",
+  "subtitulo": "Tiro dúvidas sobre o hotel e monto seu pedido de reserva.",
   "chamada": "Fale com o Will",
-  "saudacao": "Oi! Eu sou o Will, assistente virtual do Salinas House Hotel. Posso tirar suas dúvidas ou montar seu pedido de reserva.",
+  "saudacao": "Oi! Eu sou o Will, do Salinas House Hotel. Como posso ajudar na sua estadia?",
   "aviso": "Sou um assistente automático. Quem confirma a reserva é a nossa equipe, pelo WhatsApp.",
   "placeholder": "Escreva sua dúvida…",
   "opcoes": {

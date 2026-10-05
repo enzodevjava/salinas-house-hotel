@@ -109,6 +109,7 @@ export default function Will() {
   const [pedido, setPedido] = useState<Pedido>(PEDIDO_VAZIO);
   const [texto, setTexto] = useState("");
   const [erroDatas, setErroDatas] = useState(false);
+  const [digitando, setDigitando] = useState(false);
 
   const proximoId = useRef(1);
   const botaoRef = useRef<HTMLButtonElement>(null);
@@ -124,11 +125,19 @@ export default function Will() {
       ...novas.map((m) => ({ ...m, id: proximoId.current++ })),
     ]);
 
-  const responder = (texto: string, link?: Link) => adicionar({ de: "will", texto, link });
+  // Pequena pausa de "digitando" antes de cada resposta (sem pausa pra quem reduz movimento).
+  const responder = (texto: string, link?: Link) => {
+    const pausa = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 550;
+    setDigitando(true);
+    window.setTimeout(() => {
+      adicionar({ de: "will", texto, link });
+      setDigitando(false);
+    }, pausa);
+  };
 
   useEffect(() => {
     fimRef.current?.scrollIntoView({ block: "end" });
-  }, [mensagens, opcoes, etapa]);
+  }, [mensagens, opcoes, etapa, digitando]);
 
   useEffect(() => {
     if (!aberto) return;
@@ -176,7 +185,7 @@ export default function Will() {
         responder(will.reserva.hospedes);
         setOpcoes([
           ...[1, 2, 3, 4].map((n) => ({ rotulo: String(n), acao: { hospedes: n } })),
-          { rotulo: "5 ou mais", acao: { hospedes: 5 } },
+          { rotulo: "5+", acao: { hospedes: 5 } },
         ]);
         return;
       case "quartos":
@@ -325,29 +334,43 @@ export default function Will() {
     executar(opcao.acao);
   }
 
-  const avatar = (tamanho: string) => (
+  // Selo com o monograma do Will: "W" em Fraunces itálico dentro de um fio cobre.
+  const selo = (classes: string) => (
     <span
       aria-hidden="true"
-      className={`flex shrink-0 items-center justify-center rounded-full bg-cobre font-display text-osso ${tamanho}`}
+      className={`flex shrink-0 items-center justify-center rounded-full border border-cobreClaro/70 font-display italic text-cobreClaro ${classes}`}
     >
       W
     </span>
   );
+
+  // Respostas curtas (nº de hóspedes) viram uma grade; o resto, uma lista com seta.
+  const opcoesEmGrade = opcoes.length > 0 && opcoes.every((o) => o.rotulo.length <= 9);
+
+  const fechar = () => {
+    setAberto(false);
+    botaoRef.current?.focus();
+  };
 
   return (
     <>
       <button
         ref={botaoRef}
         type="button"
-        onClick={() => setAberto((a) => !a)}
+        onClick={() => (aberto ? fechar() : setAberto(true))}
         aria-expanded={aberto}
         aria-controls="will-painel"
         aria-label={aberto ? `Fechar conversa com o ${will.nome}` : will.chamada}
-        className="fixed bottom-3 right-3 z-40 flex items-center gap-2 rounded-full bg-verde p-1.5 pr-1.5 text-osso shadow-lg transition-colors hover:bg-verdeEsc sm:bottom-4 sm:right-4 sm:pr-5"
+        className="fixed bottom-3 right-3 z-40 flex items-center gap-3 border-t-2 border-cobre bg-verdeEsc p-2 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:py-2.5 sm:pl-2.5 sm:pr-5"
       >
-        {avatar("h-10 w-10 text-lg sm:h-11 sm:w-11")}
-        <span className="hidden text-xs font-medium uppercase tracking-nav sm:inline">
-          {aberto ? "Fechar" : will.chamada}
+        {selo("h-10 w-10 text-xl")}
+        <span className="hidden text-left sm:block">
+          <span className="block text-[10px] uppercase tracking-label text-cobreClaro">
+            {will.rotulo}
+          </span>
+          <span className="block text-xs font-medium uppercase tracking-nav">
+            {aberto ? "Fechar" : will.chamada}
+          </span>
         </span>
       </button>
 
@@ -355,66 +378,79 @@ export default function Will() {
         id="will-painel"
         role="dialog"
         aria-labelledby="will-titulo"
-        className={`${aberto ? "flex" : "hidden"} fixed inset-x-3 bottom-[4.5rem] z-40 max-h-[min(36rem,calc(100dvh-6rem))] flex-col overflow-hidden rounded-2xl bg-osso shadow-2xl ring-1 ring-linho sm:inset-x-auto sm:bottom-20 sm:right-4 sm:w-[23rem]`}
+        className={`${aberto ? "flex" : "hidden"} fixed inset-x-3 bottom-[4.75rem] z-40 max-h-[min(38rem,calc(100dvh-6.5rem))] flex-col bg-osso shadow-[0_24px_60px_-20px_rgba(28,26,23,0.55)] ring-1 ring-carvao/10 motion-safe:animate-[will-entrada_320ms_var(--ease-reveal)] sm:inset-x-auto sm:bottom-[5.75rem] sm:right-5 sm:w-[24rem]`}
       >
-        <header className="flex items-center gap-3 bg-verdeEsc px-4 py-3 text-osso">
-          {avatar("h-10 w-10 text-lg")}
-          <div className="min-w-0 flex-1">
-            <h2 id="will-titulo" className="font-display text-lg leading-tight">
-              {will.nome}
-            </h2>
-            <p className="truncate text-xs text-osso/75">{will.subtitulo}</p>
+        <header className="bg-verdeEsc px-5 pb-4 pt-5 text-osso">
+          <div className="flex items-center gap-3.5">
+            {selo("h-12 w-12 text-2xl")}
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] uppercase tracking-label text-cobreClaro">{will.rotulo}</p>
+              <h2 id="will-titulo" className="font-display text-2xl leading-none">
+                {will.nome}
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={fechar}
+              aria-label="Fechar conversa"
+              className="-mr-1 p-2 text-osso/70 transition-colors hover:text-cobreClaro"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              setAberto(false);
-              botaoRef.current?.focus();
-            }}
-            aria-label="Fechar conversa"
-            className="rounded-full p-2 text-osso/80 transition-colors hover:bg-verde hover:text-osso"
-          >
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          </button>
+          <p className="mt-3 border-t border-osso/15 pt-3 text-xs text-osso/70">{will.subtitulo}</p>
         </header>
 
-        <div role="log" aria-live="polite" className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
-          {mensagens.map((m) => (
-            <div key={m.id} className={m.de === "voce" ? "flex justify-end" : "flex justify-start"}>
-              <div
-                className={
-                  m.de === "voce"
-                    ? "max-w-[85%] rounded-2xl rounded-br-sm bg-verde px-3.5 py-2 text-sm text-osso"
-                    : "max-w-[85%] rounded-2xl rounded-bl-sm bg-areia px-3.5 py-2 text-sm text-carvao"
-                }
-              >
+        <div role="log" aria-live="polite" className="flex-1 space-y-4 overflow-y-auto px-5 py-5">
+          {mensagens.map((m) =>
+            m.de === "will" ? (
+              <div key={m.id} className="mr-6 border-l-2 border-cobre bg-areia px-4 py-3 text-sm leading-relaxed text-carvao">
                 <p className="whitespace-pre-line">{m.texto}</p>
                 {m.link && (
                   <a
                     href={m.link.href}
                     target={m.link.href.startsWith("/") ? undefined : "_blank"}
                     rel={m.link.href.startsWith("/") ? undefined : "noopener noreferrer"}
-                    className="mt-2 inline-flex items-center rounded-full bg-verde px-4 py-2 text-xs font-medium uppercase tracking-nav text-osso transition-colors hover:bg-verdeEsc"
+                    className="mt-3 inline-flex items-center gap-2 bg-verde px-5 py-2.5 text-[11px] font-medium uppercase tracking-nav text-osso transition-colors duration-[250ms] hover:bg-verdeEsc"
                   >
                     {m.link.rotulo}
+                    <span aria-hidden="true">→</span>
                   </a>
                 )}
               </div>
-            </div>
-          ))}
+            ) : (
+              <div key={m.id} className="ml-10 flex justify-end">
+                <p className="bg-verde px-4 py-2.5 text-sm text-osso">{m.texto}</p>
+              </div>
+            )
+          )}
 
-          {etapa === "datas" && (
-            <form onSubmit={confirmarDatas} noValidate className="space-y-3 rounded-2xl bg-areia p-3.5 text-sm">
-              <div className="grid grid-cols-2 gap-3">
-                <label className="flex flex-col gap-1">
+          {digitando && (
+            <div className="mr-6 inline-flex items-center gap-1.5 border-l-2 border-cobre bg-areia px-4 py-3.5">
+              <span className="sr-only">{will.nome} está digitando</span>
+              {[0, 150, 300].map((atraso) => (
+                <span
+                  key={atraso}
+                  aria-hidden="true"
+                  style={{ animationDelay: `${atraso}ms` }}
+                  className="h-1.5 w-1.5 rounded-full bg-cobre motion-safe:animate-pulse"
+                />
+              ))}
+            </div>
+          )}
+
+          {!digitando && etapa === "datas" && (
+            <form onSubmit={confirmarDatas} noValidate className="space-y-4 border border-linho p-4">
+              <div className="grid grid-cols-2 gap-4">
+                <label className="flex flex-col gap-1.5">
                   <span className="text-[11px] uppercase tracking-nav text-verdeCl">{will.reserva.rotuloCheckin}</span>
-                  <input ref={checkinRef} type="date" name="checkin" min={hoje} required className="border-b border-linho bg-transparent py-1.5 text-carvao outline-none focus:border-verde" />
+                  <input ref={checkinRef} type="date" name="checkin" min={hoje} required className="border-b border-linho bg-transparent py-1.5 text-sm text-carvao outline-none focus:border-verde" />
                 </label>
-                <label className="flex flex-col gap-1">
+                <label className="flex flex-col gap-1.5">
                   <span className="text-[11px] uppercase tracking-nav text-verdeCl">{will.reserva.rotuloCheckout}</span>
-                  <input type="date" name="checkout" min={hoje} required className="border-b border-linho bg-transparent py-1.5 text-carvao outline-none focus:border-verde" />
+                  <input type="date" name="checkout" min={hoje} required className="border-b border-linho bg-transparent py-1.5 text-sm text-carvao outline-none focus:border-verde" />
                 </label>
               </div>
               {erroDatas && (
@@ -422,30 +458,49 @@ export default function Will() {
                   {will.reserva.datasInvalidas}
                 </p>
               )}
-              <button type="submit" className="w-full rounded-full bg-verde px-4 py-2 text-xs font-medium uppercase tracking-nav text-osso transition-colors hover:bg-verdeEsc">
+              <button type="submit" className="inline-flex w-full items-center justify-center gap-2 bg-verde px-5 py-3 text-[11px] font-medium uppercase tracking-nav text-osso transition-colors duration-[250ms] hover:bg-verdeEsc">
                 {will.reserva.continuar}
+                <span aria-hidden="true">→</span>
               </button>
             </form>
           )}
 
-          {opcoes.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-1">
-              {opcoes.map((o) => (
-                <button
-                  key={o.rotulo}
-                  type="button"
-                  onClick={() => escolherOpcao(o)}
-                  className="rounded-full border border-verde/40 px-3.5 py-1.5 text-sm text-verde transition-colors hover:bg-verde hover:text-osso"
-                >
-                  {o.rotulo}
-                </button>
-              ))}
-            </div>
-          )}
+          {!digitando && opcoes.length > 0 &&
+            (opcoesEmGrade ? (
+              <div className="grid grid-cols-5 border-l border-t border-linho">
+                {opcoes.map((o) => (
+                  <button
+                    key={o.rotulo}
+                    type="button"
+                    onClick={() => escolherOpcao(o)}
+                    className="border-b border-r border-linho py-3 text-sm text-verde transition-colors hover:bg-verde hover:text-osso"
+                  >
+                    {o.rotulo}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <ul className="border-t border-linho">
+                {opcoes.map((o) => (
+                  <li key={o.rotulo}>
+                    <button
+                      type="button"
+                      onClick={() => escolherOpcao(o)}
+                      className="group flex w-full items-center justify-between gap-3 border-b border-linho px-1 py-3 text-left text-sm text-carvao transition-all duration-[250ms] hover:bg-areia hover:px-3"
+                    >
+                      {o.rotulo}
+                      <span aria-hidden="true" className="text-cobreTexto transition-transform group-hover:translate-x-1">
+                        →
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ))}
           <div ref={fimRef} />
         </div>
 
-        <form onSubmit={enviarTexto} className="flex items-center gap-2 border-t border-linho px-3 py-2.5">
+        <form onSubmit={enviarTexto} className="flex items-center gap-3 border-t border-linho bg-osso px-5 py-3">
           <label htmlFor="will-campo" className="sr-only">
             {etapa === "nome" ? will.reserva.nome : will.placeholder}
           </label>
@@ -457,19 +512,18 @@ export default function Will() {
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
             placeholder={etapa === "nome" ? "Seu nome" : will.placeholder}
-            className="min-w-0 flex-1 bg-transparent px-1 py-2 text-sm text-carvao outline-none placeholder:text-verdeCl"
+            className="min-w-0 flex-1 border-b border-linho bg-transparent py-2 text-sm text-carvao outline-none placeholder:text-verdeCl focus:border-verde"
           />
           <button
             type="submit"
+            disabled={digitando}
             aria-label="Enviar"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-verde text-osso transition-colors hover:bg-verdeEsc"
+            className="flex h-10 w-10 shrink-0 items-center justify-center bg-verde text-osso transition-colors duration-[250ms] hover:bg-verdeEsc disabled:opacity-60"
           >
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-              <path d="M3.4 20.4l17.45-7.48a1 1 0 000-1.84L3.4 3.6a.99.99 0 00-1.39.91L2 9.12c0 .5.37.93.87.99L17 12 2.87 13.88c-.5.07-.87.5-.87 1l.01 4.61c0 .71.73 1.2 1.39.91z" />
-            </svg>
+            <span aria-hidden="true" className="text-base">→</span>
           </button>
         </form>
-        <p className="bg-areia px-4 py-1.5 text-center text-[11px] text-verdeCl">{will.aviso}</p>
+        <p className="border-t border-linho bg-areia px-5 py-2 text-[11px] leading-snug text-verdeCl">{will.aviso}</p>
       </section>
     </>
   );

@@ -201,3 +201,15 @@
     }
   }
 }
+
+/* Entrada do painel do Will (só com motion-safe, ver Will.tsx) */
+@keyframes will-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
