@@ -133,15 +133,15 @@ function Assinatura({ grande = false }: { grande?: boolean }) {
     <span aria-hidden="true" className="flex flex-col items-center leading-none">
       <span
         className={`font-display font-light uppercase ${
-          grande ? "pl-[0.16em] text-4xl tracking-[0.16em]" : "pl-[0.14em] text-lg tracking-[0.14em] sm:text-xl"
+          grande ? "pl-[0.16em] text-4xl tracking-[0.16em]" : "pl-[0.14em] text-[15px] tracking-[0.14em] sm:text-base"
         }`}
       >
         {will.nome}
       </span>
-      <Ornamento className={`text-osso/65 ${grande ? "my-2.5 w-44" : "my-1 w-20 sm:my-1.5 sm:w-24"}`} />
+      <Ornamento className={`text-osso/65 ${grande ? "my-2.5 w-44" : "my-[3px] w-14 sm:my-1 sm:w-16"}`} />
       <span
         className={`uppercase text-osso/85 ${
-          grande ? "pl-[0.45em] text-[10px] tracking-[0.45em]" : "pl-[0.4em] text-[8px] tracking-[0.4em]"
+          grande ? "pl-[0.45em] text-[10px] tracking-[0.45em]" : "pl-[0.35em] text-[7px] tracking-[0.35em]"
         }`}
       >
         {grande ? will.rotulo : will.rotuloCurto}
@@ -404,7 +404,7 @@ export default function Will() {
         aria-expanded={aberto}
         aria-controls="will-painel"
         aria-label={aberto ? `Fechar conversa com o ${will.nome}` : will.chamada}
-        className="fixed bottom-3 right-3 z-40 bg-verdeEsc px-4 py-2.5 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:px-6 sm:py-3.5"
+        className="fixed bottom-3 right-3 z-40 bg-verdeEsc px-3 py-2 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:px-3.5 sm:py-2"
       >
         <Assinatura />
       </button>
@@ -413,7 +413,7 @@ export default function Will() {
         id="will-painel"
         role="dialog"
         aria-labelledby="will-titulo"
-        className={`${aberto ? "flex" : "hidden"} fixed inset-x-3 bottom-[6rem] z-40 max-h-[min(38rem,calc(100dvh-7.5rem))] flex-col bg-osso shadow-[0_24px_60px_-20px_rgba(28,26,23,0.55)] ring-1 ring-carvao/10 motion-safe:animate-[will-entrada_320ms_var(--ease-reveal)] sm:inset-x-auto sm:bottom-[7.25rem] sm:right-5 sm:w-[24rem]`}
+        className={`${aberto ? "flex" : "hidden"} fixed inset-x-3 bottom-[4.75rem] z-40 max-h-[min(38rem,calc(100dvh-6.5rem))] flex-col bg-osso shadow-[0_24px_60px_-20px_rgba(28,26,23,0.55)] ring-1 ring-carvao/10 motion-safe:animate-[will-entrada_320ms_var(--ease-reveal)] sm:inset-x-auto sm:bottom-[5.75rem] sm:right-5 sm:w-[24rem]`}
       >
         <header className="relative bg-verdeEsc px-5 pb-4 pt-6 text-osso">
           <h2 id="will-titulo">
