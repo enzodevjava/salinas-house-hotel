@@ -123,7 +123,34 @@ function Ornamento({ compacto = false, className = "" }: { compacto?: boolean; c
   );
 }
 
-const rotuloHospedes =(n: number) => (n === 1 ? "1 pessoa" : `${n} pessoas`);
+/**
+ * Assinatura do Will no mesmo desenho da logo do hotel: nome em serifa maiúscula,
+ * ornamento no meio e a palavra de baixo bem espaçada ("SALINAS HOUSE / — o — / HOTEL").
+ * O padding-left igual ao tracking recentraliza o texto, que ganha espaço sobrando no fim.
+ */
+function Assinatura({ grande = false }: { grande?: boolean }) {
+  return (
+    <span aria-hidden="true" className="flex flex-col items-center leading-none">
+      <span
+        className={`font-display font-light uppercase ${
+          grande ? "pl-[0.16em] text-4xl tracking-[0.16em]" : "pl-[0.14em] text-lg tracking-[0.14em] sm:text-xl"
+        }`}
+      >
+        {will.nome}
+      </span>
+      <Ornamento className={`text-osso/65 ${grande ? "my-2.5 w-44" : "my-1 w-20 sm:my-1.5 sm:w-24"}`} />
+      <span
+        className={`uppercase text-osso/85 ${
+          grande ? "pl-[0.45em] text-[10px] tracking-[0.45em]" : "pl-[0.4em] text-[8px] tracking-[0.4em]"
+        }`}
+      >
+        {grande ? will.rotulo : will.rotuloCurto}
+      </span>
+    </span>
+  );
+}
+
+const rotuloHospedes = (n: number) => (n === 1 ? "1 pessoa" : `${n} pessoas`);
 
 export default function Will() {
   const [aberto, setAberto] = useState(false);
@@ -377,49 +404,35 @@ export default function Will() {
         aria-expanded={aberto}
         aria-controls="will-painel"
         aria-label={aberto ? `Fechar conversa com o ${will.nome}` : will.chamada}
-        className="fixed bottom-3 right-3 z-40 flex h-14 items-center gap-4 border-t-2 border-cobre bg-verdeEsc px-3 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:h-auto sm:py-3 sm:pl-4 sm:pr-5"
+        className="fixed bottom-3 right-3 z-40 bg-verdeEsc px-4 py-2.5 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:px-6 sm:py-3.5"
       >
-        <Ornamento compacto className="w-9 text-cobreClaro sm:w-10" />
-        <span aria-hidden="true" className="-ml-1 text-xs font-medium uppercase tracking-nav sm:hidden">
-          {will.nome}
-        </span>
-        <span className="hidden text-left sm:block">
-          <span className="block text-[10px] uppercase tracking-label text-cobreClaro">
-            {will.rotulo}
-          </span>
-          <span className="block text-xs font-medium uppercase tracking-nav">
-            {aberto ? "Fechar" : will.chamada}
-          </span>
-        </span>
+        <Assinatura />
       </button>
 
       <section
         id="will-painel"
         role="dialog"
         aria-labelledby="will-titulo"
-        className={`${aberto ? "flex" : "hidden"} fixed inset-x-3 bottom-[4.75rem] z-40 max-h-[min(38rem,calc(100dvh-6.5rem))] flex-col bg-osso shadow-[0_24px_60px_-20px_rgba(28,26,23,0.55)] ring-1 ring-carvao/10 motion-safe:animate-[will-entrada_320ms_var(--ease-reveal)] sm:inset-x-auto sm:bottom-[5.75rem] sm:right-5 sm:w-[24rem]`}
+        className={`${aberto ? "flex" : "hidden"} fixed inset-x-3 bottom-[6rem] z-40 max-h-[min(38rem,calc(100dvh-7.5rem))] flex-col bg-osso shadow-[0_24px_60px_-20px_rgba(28,26,23,0.55)] ring-1 ring-carvao/10 motion-safe:animate-[will-entrada_320ms_var(--ease-reveal)] sm:inset-x-auto sm:bottom-[7.25rem] sm:right-5 sm:w-[24rem]`}
       >
-        <header className="bg-verdeEsc px-5 pb-4 pt-5 text-osso">
-          <div className="flex items-start gap-3.5">
-            <div className="min-w-0 flex-1">
-              <Ornamento className="w-28 text-cobreClaro" />
-              <p className="mt-3 text-[10px] uppercase tracking-label text-cobreClaro">{will.rotulo}</p>
-              <h2 id="will-titulo" className="mt-1 font-display text-3xl leading-none">
-                {will.nome}
-              </h2>
-            </div>
+        <header className="relative bg-verdeEsc px-5 pb-4 pt-6 text-osso">
+          <h2 id="will-titulo">
+            <span className="sr-only">{will.nome}, {will.rotulo.toLowerCase()}</span>
+            <Assinatura grande />
+          </h2>
+          <div>
             <button
               type="button"
               onClick={fechar}
               aria-label="Fechar conversa"
-              className="-mr-1 p-2 text-osso/70 transition-colors hover:text-cobreClaro"
+              className="absolute right-3 top-3 p-2 text-osso/70 transition-colors hover:text-cobreClaro"
             >
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                 <path d="M6 6l12 12M18 6L6 18" />
               </svg>
             </button>
           </div>
-          <p className="mt-3 hidden border-t border-osso/15 pt-3 text-xs text-osso/70 sm:block">{will.subtitulo}</p>
+          <p className="mt-4 hidden border-t border-osso/15 pt-3 text-center text-xs text-osso/70 sm:block">{will.subtitulo}</p>
         </header>
 
         <div role="log" aria-live="polite" className="flex-1 space-y-4 overflow-y-auto px-5 py-5">

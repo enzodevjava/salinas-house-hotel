@@ -1,6 +1,7 @@
 {
   "nome": "Will",
   "rotulo": "Assistente virtual",
+  "rotuloCurto": "Assistente",
   "subtitulo": "Tiro dúvidas sobre o hotel e monto seu pedido de reserva.",
   "chamada": "Fale com o Will",
   "saudacao": "Oi! Eu sou o Will, do Salinas House Hotel. Como posso ajudar na sua estadia?",
