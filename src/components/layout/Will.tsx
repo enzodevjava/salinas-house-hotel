@@ -99,12 +99,15 @@ function buscarFaq(texto: string): string | undefined {
 
 /**
  * Ornamento da logo do hotel (anel central, linhas finas, anéis e pontos nas pontas).
- * `compacto` mostra só o anel central com um trecho curto das linhas.
+ * `comprimento` (em unidades do desenho, altura = 16) alonga só as linhas: os anéis
+ * mantêm o tamanho, então o ornamento fica mais largo sem ficar mais alto.
  */
-function Ornamento({ compacto = false, className = "" }: { compacto?: boolean; className?: string }) {
+function Ornamento({ comprimento = 120, className = "" }: { comprimento?: number; className?: string }) {
+  const meio = comprimento / 2;
+  const fim = comprimento;
   return (
     <svg
-      viewBox={compacto ? "40 0 40 16" : "0 0 120 16"}
+      viewBox={`0 0 ${fim} 16`}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.25"
@@ -113,12 +116,12 @@ function Ornamento({ compacto = false, className = "" }: { compacto?: boolean; c
     >
       <circle cx="2.5" cy="8" r="1.3" fill="currentColor" stroke="none" />
       <circle cx="8.5" cy="8" r="2.6" />
-      <path d="M11.1 8H52" />
-      <circle cx="60" cy="8" r="6.6" />
-      <circle cx="60" cy="8" r="4.2" />
-      <path d="M68 8h40.9" />
-      <circle cx="111.5" cy="8" r="2.6" />
-      <circle cx="117.5" cy="8" r="1.3" fill="currentColor" stroke="none" />
+      <path d={`M11.1 8H${meio - 8}`} />
+      <circle cx={meio} cy="8" r="6.6" />
+      <circle cx={meio} cy="8" r="4.2" />
+      <path d={`M${meio + 8} 8H${fim - 11.1}`} />
+      <circle cx={fim - 8.5} cy="8" r="2.6" />
+      <circle cx={fim - 2.5} cy="8" r="1.3" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -133,15 +136,18 @@ function Assinatura({ grande = false }: { grande?: boolean }) {
     <span aria-hidden="true" className="flex flex-col items-center leading-none">
       <span
         className={`font-display font-light uppercase ${
-          grande ? "pl-[0.16em] text-4xl tracking-[0.16em]" : "pl-[0.14em] text-base tracking-[0.14em] sm:text-lg"
+          grande ? "pl-[0.16em] text-4xl tracking-[0.16em]" : "pl-[0.2em] text-base tracking-[0.2em] sm:text-lg"
         }`}
       >
         {will.nome}
       </span>
-      <Ornamento className={`text-osso/65 ${grande ? "my-2.5 w-44" : "my-1 w-[4.25rem] sm:w-20"}`} />
+      <Ornamento
+        comprimento={grande ? 120 : 210}
+        className={`text-osso/65 ${grande ? "my-2.5 w-44" : "my-1 w-28 sm:w-32"}`}
+      />
       <span
         className={`uppercase text-osso/85 ${
-          grande ? "pl-[0.45em] text-[10px] tracking-[0.45em]" : "pl-[0.38em] text-[8px] tracking-[0.38em]"
+          grande ? "pl-[0.45em] text-[10px] tracking-[0.45em]" : "pl-[0.55em] text-[8px] tracking-[0.55em]"
         }`}
       >
         {grande ? will.rotulo : will.rotuloCurto}
@@ -404,7 +410,7 @@ export default function Will() {
         aria-expanded={aberto}
         aria-controls="will-painel"
         aria-label={aberto ? `Fechar conversa com o ${will.nome}` : will.chamada}
-        className="fixed bottom-3 right-3 z-40 bg-verdeEsc px-3.5 py-2 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:px-4 sm:py-2.5"
+        className="fixed bottom-3 right-3 z-40 bg-verdeEsc px-5 py-1.5 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:px-6 sm:py-2.5"
       >
         <Assinatura />
       </button>
