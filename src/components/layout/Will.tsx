@@ -213,7 +213,15 @@ export default function Will() {
       }
     };
     document.addEventListener("keydown", aoTeclar);
-    return () => document.removeEventListener("keydown", aoTeclar);
+
+    // No celular o painel ocupa a tela inteira: trava a rolagem da página por trás.
+    const telaCheia = window.matchMedia("(max-width: 639px)").matches;
+    if (telaCheia) document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", aoTeclar);
+      if (telaCheia) document.body.style.overflow = "";
+    };
   }, [aberto]);
 
   function executar(acao: Acao) {
@@ -410,18 +418,27 @@ export default function Will() {
         aria-expanded={aberto}
         aria-controls="will-painel"
         aria-label={aberto ? `Fechar conversa com o ${will.nome}` : will.chamada}
-        className="fixed bottom-3 right-3 z-40 bg-verdeEsc px-5 py-1.5 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:px-6 sm:py-2.5"
+        className="fixed bottom-3 right-3 z-40 bg-verdeEsc px-4 py-2.5 text-osso shadow-[0_10px_30px_-10px_rgba(28,26,23,0.55)] transition-colors duration-[250ms] hover:bg-verde sm:bottom-5 sm:right-5 sm:px-6 sm:py-2.5"
       >
-        <Assinatura />
+        {/* Celular: faixa fina de uma linha. Computador: assinatura no desenho da logo. */}
+        <span aria-hidden="true" className="flex items-center gap-3 sm:hidden">
+          <Ornamento comprimento={56} className="w-11 text-osso/65" />
+          <span className="pl-[0.2em] font-display text-base font-light uppercase leading-none tracking-[0.2em]">
+            {will.nome}
+          </span>
+        </span>
+        <span className="hidden sm:block">
+          <Assinatura />
+        </span>
       </button>
 
       <section
         id="will-painel"
         role="dialog"
         aria-labelledby="will-titulo"
-        className={`${aberto ? "flex" : "hidden"} fixed inset-x-3 bottom-[5.5rem] z-40 max-h-[min(38rem,calc(100dvh-7rem))] flex-col bg-osso shadow-[0_24px_60px_-20px_rgba(28,26,23,0.55)] ring-1 ring-carvao/10 motion-safe:animate-[will-entrada_320ms_var(--ease-reveal)] sm:inset-x-auto sm:bottom-[6.5rem] sm:right-5 sm:w-[24rem]`}
+        className={`${aberto ? "flex" : "hidden"} fixed inset-0 z-50 h-[100dvh] flex-col bg-osso motion-safe:animate-[will-entrada_320ms_var(--ease-reveal)] sm:inset-auto sm:bottom-[6.5rem] sm:right-5 sm:z-40 sm:h-auto sm:max-h-[min(38rem,calc(100dvh-7rem))] sm:w-[24rem] sm:shadow-[0_24px_60px_-20px_rgba(28,26,23,0.55)] sm:ring-1 sm:ring-carvao/10`}
       >
-        <header className="relative bg-verdeEsc px-5 pb-4 pt-6 text-osso">
+        <header className="relative bg-verdeEsc px-5 pb-4 pt-[max(1.75rem,env(safe-area-inset-top))] text-osso sm:pt-6">
           <h2 id="will-titulo">
             <span className="sr-only">{will.nome}, {will.rotulo.toLowerCase()}</span>
             <Assinatura grande />
@@ -438,7 +455,7 @@ export default function Will() {
               </svg>
             </button>
           </div>
-          <p className="mt-4 hidden border-t border-osso/15 pt-3 text-center text-xs text-osso/70 sm:block">{will.subtitulo}</p>
+          <p className="mt-4 border-t border-osso/15 pt-3 text-center text-xs text-osso/70">{will.subtitulo}</p>
         </header>
 
         <div role="log" aria-live="polite" className="flex-1 space-y-4 overflow-y-auto px-5 py-5">
@@ -561,7 +578,7 @@ export default function Will() {
             <span aria-hidden="true" className="text-base">→</span>
           </button>
         </form>
-        <p className="border-t border-linho bg-areia px-5 py-2 text-[11px] leading-snug text-verdeCl">{will.aviso}</p>
+        <p className="border-t border-linho bg-areia px-5 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 text-[11px] leading-snug text-verdeCl sm:pb-2">{will.aviso}</p>
       </section>
     </>
   );
