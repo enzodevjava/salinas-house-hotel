@@ -81,13 +81,22 @@ Resumo rápido:
 
 ## Will, o assistente virtual
 
-O balão "Fale com o Will" no canto da tela (`src/components/layout/Will.tsx`)
-tira dúvidas e monta o pedido de reserva, que sai pronto pro WhatsApp da
-recepção. Ele **não usa IA**: responde com o conteúdo de `faq.json`,
-`hotel.json` e `quartos.json`, e reconhece as palavras listadas em
-`will.json`. O que ele não sabe responder vira uma pergunta pronta pro
-WhatsApp. Pra ele responder algo novo, basta adicionar a pergunta em
-`faq.json` (e, se precisar, um sinônimo em `will.json`).
+O botão "Will" no canto da tela (`src/components/layout/Will.tsx`) tira
+dúvidas e monta o pedido de reserva, que sai pronto pro WhatsApp da recepção.
+No celular a conversa abre em tela cheia. Ele **não usa IA**:
+
+- Responde com o conteúdo de `faq.json` (perguntas frequentes) e
+  `estrutura.json` (comodidades), além de `hotel.json` e `quartos.json`.
+- Entende assuntos pelas palavras de `will.json → intencoes` (reserva, preço,
+  cancelamento, eventos, como chegar…). `"palavra"` casa só a palavra inteira,
+  `"radical*"` casa o começo da palavra e `"duas palavras"` casa a expressão.
+- Assuntos de `soEquipe` (pagamento, senha do Wi-Fi…) e tudo o que ele não
+  sabe viram uma pergunta pronta pro WhatsApp. Ele não chuta.
+- A conversa fica guardada só no navegador, enquanto a aba estiver aberta.
+
+Pra ele responder algo novo, basta adicionar a pergunta em `faq.json` (e, se
+precisar, um sinônimo em `will.json → sinonimos`). A lógica fica em
+`src/lib/will.ts`.
 
 Custo: zero. Ligar uma IA de verdade depois exige uma API paga (ou um plano
 gratuito com limites) e um pequeno servidor pra guardar a chave.

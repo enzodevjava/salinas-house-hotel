@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import hotel from "../../content/hotel.json";
 import quartos from "../../content/quartos.json";
-import faq from "../../content/faq.json";
 import will from "../../content/will.json";
 import { linkWhatsApp, mensagemReserva, MENSAGENS } from "../../lib/whatsapp";
 import { dataLocal } from "../../lib/reserva";
 import { ocupacaoQuarto } from "../../lib/quartos";
+import { buscarConhecimento, numeroDePessoas, temIntencao } from "../../lib/will";
 
 // Will: assistente do site com respostas prontas (sem IA). As respostas vêm de
-// will.json, faq.json, hotel.json e quartos.json; o pedido de reserva sai
+// will.json, faq.json, estrutura.json, hotel.json e quartos.json (entendimento em
+// lib/will.ts); o pedido de reserva sai
 // montado pro WhatsApp, como no formulário de /reservar.
 
 type Acao =
@@ -48,7 +49,11 @@ interface Pedido {
   quarto: string;
 }
 
-const PEDIDO_VAZIO: Pedido = { hospedes: 0, checkin: "", checkout: "", quarto: "" };
+const CHAVE_CONVERSA = "salinas-will-conversa";
+
+const FOCAVEIS = 'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+const PEDIDO_VAZIO: Pedido ={ hospedes: 0, checkin: "", checkout: "", quarto: "" };
 
 const OPCOES_INICIO: Opcao[] = [
   { rotulo: will.opcoes.reservar, acao: "reservar" },
@@ -60,41 +65,14 @@ const OPCOES_INICIO: Opcao[] = [
 
 const VOLTAR: Opcao = { rotulo: will.opcoes.inicio, acao: "inicio" };
 
+const OPCOES_HOSPEDES: Opcao[] = [
+  ...[1, 2, 3, 4].map((n) => ({ rotulo: String(n), acao: { hospedes: n } })),
+  { rotulo: "5+", acao: { hospedes: 5 } },
+];
+
 /** Troca {chave} pelos valores informados. */
 function preencher(texto: string, valores: Record<string, string | number>): string {
   return texto.replace(/\{(\w+)\}/g, (_, chave) => String(valores[chave] ?? ""));
-}
-
-/** Minúsculas e sem acento, pra comparar o que a pessoa digitou. */
-function normalizar(texto: string): string {
-  return texto.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
-}
-
-const contem = (texto: string, palavras: string[]) =>
-  palavras.some((p) => texto.includes(normalizar(p)));
-
-const PALAVRAS_IGNORADAS = new Set(
-  "para pra com tem voces hotel qual quais como esta sao uma tambem posso quero gostaria saber"
-    .split(" ")
-);
-
-const SINONIMOS: Record<string, string> = will.sinonimos;
-
-/** Acha a pergunta do FAQ que mais divide palavras com o texto digitado. */
-function buscarFaq(texto: string): string | undefined {
-  const palavras = normalizar(texto)
-    .split(/[^a-z0-9]+/)
-    .filter((p) => p.length > 2 && !PALAVRAS_IGNORADAS.has(p))
-    .map((p) => SINONIMOS[p] ?? p);
-  let melhor: { resposta: string; pontos: number } | undefined;
-  for (const item of faq) {
-    const alvo = normalizar(`${item.pergunta} ${item.resposta}`);
-    const pontos = palavras.filter((p) => alvo.includes(p.slice(0, 5))).length;
-    if (pontos > 0 && (!melhor || pontos > melhor.pontos)) {
-      melhor = { resposta: item.resposta, pontos };
-    }
-  }
-  return melhor?.resposta;
 }
 
 /**
@@ -175,6 +153,7 @@ export default function Will() {
   const campoRef = useRef<HTMLInputElement>(null);
   const checkinRef = useRef<HTMLInputElement>(null);
   const fimRef = useRef<HTMLDivElement>(null);
+  const painelRef = useRef<HTMLElement>(null);
 
   const hoje = dataLocal(new Date());
 
@@ -204,19 +183,59 @@ export default function Will() {
     else campoRef.current?.focus();
   }, [aberto, etapa]);
 
+  // A conversa continua ao trocar de página (vale enquanto a aba estiver aberta).
+  const restaurado = useRef(false);
+  useEffect(() => {
+    try {
+      const salvo = JSON.parse(sessionStorage.getItem(CHAVE_CONVERSA) ?? "null");
+      if (Array.isArray(salvo?.mensagens) && salvo.mensagens.length > 0) {
+        setMensagens(salvo.mensagens);
+        setOpcoes(salvo.opcoes ?? OPCOES_INICIO);
+        setEtapa(salvo.etapa ?? "livre");
+        setPedido(salvo.pedido ?? PEDIDO_VAZIO);
+        proximoId.current = Math.max(...salvo.mensagens.map((m: Mensagem) => m.id)) + 1;
+      }
+    } catch {
+      // Sem sessionStorage (aba anônima, bloqueio): começa do zero.
+    }
+    restaurado.current = true;
+  }, []);
+
+  useEffect(() => {
+    if (!restaurado.current) return;
+    try {
+      sessionStorage.setItem(CHAVE_CONVERSA, JSON.stringify({ mensagens, opcoes, etapa, pedido }));
+    } catch {
+      // Sem sessionStorage: a conversa só não sobrevive à troca de página.
+    }
+  }, [mensagens, opcoes, etapa, pedido]);
+
   useEffect(() => {
     if (!aberto) return;
+    // No celular o painel ocupa a tela inteira: trava a rolagem da página e o foco do teclado.
+    const telaCheia = window.matchMedia("(max-width: 639px)").matches;
+    if (telaCheia) document.body.style.overflow = "hidden";
+
     const aoTeclar = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setAberto(false);
         botaoRef.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab" || !telaCheia || !painelRef.current) return;
+      const focaveis = painelRef.current.querySelectorAll<HTMLElement>(FOCAVEIS);
+      if (focaveis.length === 0) return;
+      const primeiro = focaveis[0];
+      const ultimo = focaveis[focaveis.length - 1];
+      if (e.shiftKey && document.activeElement === primeiro) {
+        e.preventDefault();
+        ultimo.focus();
+      } else if (!e.shiftKey && document.activeElement === ultimo) {
+        e.preventDefault();
+        primeiro.focus();
       }
     };
     document.addEventListener("keydown", aoTeclar);
-
-    // No celular o painel ocupa a tela inteira: trava a rolagem da página por trás.
-    const telaCheia = window.matchMedia("(max-width: 639px)").matches;
-    if (telaCheia) document.body.style.overflow = "hidden";
 
     return () => {
       document.removeEventListener("keydown", aoTeclar);
@@ -250,10 +269,7 @@ export default function Will() {
         }
         setPedido(PEDIDO_VAZIO);
         responder(will.reserva.hospedes);
-        setOpcoes([
-          ...[1, 2, 3, 4].map((n) => ({ rotulo: String(n), acao: { hospedes: n } })),
-          { rotulo: "5+", acao: { hospedes: 5 } },
-        ]);
+        setOpcoes(OPCOES_HOSPEDES);
         return;
       case "quartos":
         responder(will.respostas.quartos);
@@ -284,8 +300,9 @@ export default function Will() {
     }
   }
 
-  function escolherHospedes(n: number) {
-    adicionar({ de: "voce", texto: n >= 5 ? "5 ou mais" : String(n) });
+  /** `eco`: repete a escolha como fala do hóspede (falso quando o número veio digitado). */
+  function escolherHospedes(n: number, eco = true) {
+    if (eco) adicionar({ de: "voce", texto: n >= 5 ? "5 ou mais" : String(n) });
     if (n >= 5) {
       responder(will.reserva.grupo, {
         href: linkWhatsApp(MENSAGENS.hero),
@@ -375,19 +392,67 @@ export default function Will() {
     }
 
     adicionar({ de: "voce", texto: digitado });
-    const n = normalizar(digitado);
-    if (contem(n, will.palavrasReserva)) return executar("reservar");
-    if (contem(n, will.palavrasHorarios)) return executar("horarios");
-    if (contem(n, will.palavrasComoChegar)) return executar("comoChegar");
-    if (contem(n, will.palavrasRecepcao)) return executar("recepcao");
+    setEtapa("livre");
+    setErroDatas(false);
 
-    const resposta = buscarFaq(digitado);
+    // Ordem importa: do assunto mais específico pro mais genérico.
+    if (temIntencao("cancelar", digitado)) {
+      responder(will.respostas.cancelar, {
+        href: linkWhatsApp(MENSAGENS.duvida(digitado)),
+        rotulo: will.respostas.abrirWhatsApp,
+      });
+      setOpcoes(OPCOES_INICIO);
+      return;
+    }
+
+    // Assuntos que só a equipe sabe (pagamento, senha do Wi-Fi…): encaminha em vez de chutar.
+    if (temIntencao("soEquipe", digitado)) {
+      responder(will.respostas.soEquipe, {
+        href: linkWhatsApp(MENSAGENS.duvida(digitado)),
+        rotulo: will.respostas.enviarPergunta,
+      });
+      setOpcoes(OPCOES_INICIO);
+      return;
+    }
+
+    const pessoas = numeroDePessoas(digitado);
+    if (pessoas && !hotel.motorReservas) return escolherHospedes(pessoas, false);
+
+    if (temIntencao("eventos", digitado)) {
+      responder(hotel.eventos.texto, { href: "/eventos", rotulo: will.respostas.verEventos });
+      setOpcoes(OPCOES_INICIO);
+      return;
+    }
+    if (temIntencao("comoChegar", digitado)) return executar("comoChegar");
+    if (temIntencao("horarios", digitado)) return executar("horarios");
+
+    const resposta = buscarConhecimento(digitado);
     if (resposta) {
       responder(resposta);
       setOpcoes(OPCOES_INICIO);
       return;
     }
-    if (contem(n, will.palavrasQuartos)) return executar("quartos");
+
+    if (temIntencao("preco", digitado) && !hotel.motorReservas) {
+      setPedido(PEDIDO_VAZIO);
+      responder(will.reserva.preco);
+      setOpcoes(OPCOES_HOSPEDES);
+      return;
+    }
+    if (temIntencao("reservar", digitado) || temIntencao("preco", digitado)) return executar("reservar");
+    if (temIntencao("quartos", digitado)) return executar("quartos");
+    if (temIntencao("recepcao", digitado)) return executar("recepcao");
+
+    if (temIntencao("saudacao", digitado)) {
+      responder(will.respostas.saudacao);
+      setOpcoes(OPCOES_INICIO);
+      return;
+    }
+    if (temIntencao("agradecimento", digitado)) {
+      responder(will.respostas.agradecimento);
+      setOpcoes(OPCOES_INICIO);
+      return;
+    }
 
     responder(will.respostas.naoEntendi, {
       href: linkWhatsApp(MENSAGENS.duvida(digitado)),
@@ -433,6 +498,7 @@ export default function Will() {
       </button>
 
       <section
+        ref={painelRef}
         id="will-painel"
         role="dialog"
         aria-labelledby="will-titulo"
